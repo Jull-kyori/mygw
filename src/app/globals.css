@@ -179,3 +179,23 @@
 .portfolio-shell[data-theme=terang] .mac-project-window .featured-bento-grid>.project-card:nth-child(3n){background:linear-gradient(145deg,rgba(232,140,183,.14),rgba(255,255,255,.72) 75%)!important}
 .portfolio-shell[data-theme=terang] .mac-project-window .projects-more{background:rgba(238,238,246,.62)}
 @media(max-width:640px){.mac-project-window{border-radius:18px}.mac-window-titlebar{height:40px;padding:0 12px}.mac-project-window .project-tools{padding:13px 12px 10px}.mac-project-window .projects-subheading{margin:12px 13px 10px}.mac-project-window .featured-bento-grid{padding:0 12px 12px}.mac-project-window .featured-bento-grid>.project-card,.mac-project-window .featured-bento-grid>.project-card:first-child{min-height:230px}.mac-project-window .projects-more{margin:0 12px 12px;padding:13px 11px 10px}.mac-project-window .projects-more .project-card{min-height:215px}.mac-project-window .empty-state{margin:10px 12px 12px}}
+
+/* Tata letak keahlian seimbang dengan warna lembut per kategori. */
+.skills-bento{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(218px,auto));grid-auto-rows:auto;gap:16px;align-items:stretch}
+.skills-bento>.skill-group,.skills-bento>.skill-group-0,.skills-bento>.skill-group-1,.skills-bento>.skill-group-2,.skills-bento>.skill-group-3{grid-column:auto;grid-row:auto;min-width:0;min-height:218px;padding:22px;border-radius:22px}
+.skill-group h3{margin:15px 0 14px;font-size:18px}
+.tech-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px}
+.tech-tile{min-height:48px;padding:9px 11px;border-radius:13px;background:rgba(255,255,255,.055);font-size:10px}
+.tech-tile svg{color:var(--skill-accent,#b6a2ff)}
+.skill-group{--skill-accent:#b9a2ff;background:linear-gradient(145deg,rgba(145,111,232,.17),var(--local-surface) 68%);border-color:rgba(176,150,246,.2)}
+.skill-blue{--skill-accent:#82c9f5;background:linear-gradient(145deg,rgba(65,154,210,.17),var(--local-surface) 68%);border-color:rgba(115,190,231,.2)}
+.skill-pink{--skill-accent:#f1a5cf;background:linear-gradient(145deg,rgba(208,101,160,.17),var(--local-surface) 68%);border-color:rgba(229,143,191,.2)}
+.skill-mint{--skill-accent:#75d8c1;background:linear-gradient(145deg,rgba(54,170,148,.17),var(--local-surface) 68%);border-color:rgba(113,213,190,.2)}
+.skill-group .skill-icon{color:var(--skill-accent);background:color-mix(in srgb,var(--skill-accent) 16%,transparent)}
+.skill-group .skill-decoration{right:18px;bottom:8px;font-size:44px;color:color-mix(in srgb,var(--skill-accent) 10%,transparent);pointer-events:none}
+.skill-group .tech-tile{border-color:color-mix(in srgb,var(--skill-accent) 17%,var(--local-border))}
+.skill-group .tech-tile:hover,.skill-group .tech-tile:focus-visible,.skill-group .tech-tile.tech-selected{border-color:color-mix(in srgb,var(--skill-accent) 60%,transparent);background:color-mix(in srgb,var(--skill-accent) 17%,var(--local-surface))}
+.ambient span{opacity:.28}
+.portfolio-shell[data-theme=terang] .ambient span{opacity:.15}
+@media(max-width:900px){.skills-bento{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(205px,auto));gap:13px}.skills-bento>.skill-group,.skills-bento>.skill-group-0,.skills-bento>.skill-group-1,.skills-bento>.skill-group-2,.skills-bento>.skill-group-3{min-height:205px;padding:18px}.tech-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr))}}
+@media(max-width:640px){.skills-bento{grid-template-columns:1fr;grid-template-rows:none;gap:11px}.skills-bento>.skill-group,.skills-bento>.skill-group-0,.skills-bento>.skill-group-1,.skills-bento>.skill-group-2,.skills-bento>.skill-group-3{min-height:0;padding:17px 16px}.skill-group h3{font-size:16px;margin:13px 0 12px}.tech-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,135px),1fr));gap:7px}.tech-tile{min-height:44px;padding:8px 9px;font-size:9px}.skill-group .skill-decoration{font-size:37px}}
