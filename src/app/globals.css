@@ -415,3 +415,104 @@
 @keyframes ornament-spin{to{transform:rotate(360deg)}}
 @media(max-width:640px){.section-divider{width:calc(100% - 40px);margin:52px auto -18px}.ornament-ring,.ornament-cross{display:none}}
 @media(prefers-reduced-motion:reduce){.ornament-ring,.ornament-cross{animation:none!important}}
+
+/* Desain HUD futuristik & ringkas untuk Tentang dan Teknologi (menggantikan kotak besar yang boros ruang) */
+.about-section,.projects-section,.skills-section,.journey-section{padding-top:96px}
+.contact-section{padding-top:96px;padding-bottom:92px}
+.about-hud{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:stretch}
+.about-hud>div{display:flex}
+.about-hud>div>.glass{width:100%}
+.about-core,.about-focus-hud{padding:24px;display:flex;flex-direction:column}
+.about-core{background:linear-gradient(145deg,rgba(10,132,255,.12),var(--local-surface) 58%,rgba(191,90,242,.1))}
+.about-focus-hud{background:linear-gradient(145deg,rgba(48,199,181,.1),var(--local-surface) 62%,rgba(10,132,255,.08))}
+.hud-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.hud-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:99px;border:1px solid rgba(48,199,181,.26);background:rgba(48,199,181,.08);font-size:8px;letter-spacing:1px;color:#7be6d8;font-weight:600}
+.portfolio-shell[data-theme=terang] .hud-badge{color:#0f8678}
+.hud-tag{padding:4px 8px;border-radius:7px;border:1px solid var(--local-border);background:rgba(255,255,255,.04);font-size:8px;letter-spacing:1px;color:var(--local-muted)}
+.about-core h3{font:500 25px/1.2 var(--font-display);letter-spacing:-.9px;margin:0 0 10px}
+.about-core>p{margin:0;color:var(--local-muted);font-size:12px;line-height:1.7;max-width:460px}
+.about-telemetry{margin-top:18px;padding:12px 14px;border-radius:14px;border:1px solid var(--local-border);background:rgba(255,255,255,.035);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.portfolio-shell[data-theme=terang] .about-telemetry{background:rgba(255,255,255,.6)}
+.about-telemetry div{display:flex;flex-direction:column;gap:4px}
+.about-telemetry span{font-size:7.5px;letter-spacing:1.1px;color:var(--local-soft);font-weight:600}
+.about-telemetry b{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:550;color:var(--local-fg)}
+.about-telemetry b svg{color:#78b8ff;flex:0 0 auto}
+.about-core-foot{margin-top:auto;padding-top:16px;display:flex;align-items:center;justify-content:space-between}
+.about-core-foot .about-signature{position:static;padding:0;margin:0}
+.about-core-foot .language-visual{position:static;height:22px}
+
+/* Futuristic Tech Matrix Console */
+.tech-console{padding:20px 22px;border-radius:24px;background:linear-gradient(135deg,rgba(10,132,255,.1),var(--local-surface) 45%,rgba(191,90,242,.09))}
+.tech-console-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--local-border)}
+.tech-console-status{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:1.2px;font-weight:600;color:var(--local-muted);font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.tech-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tech-tab{padding:6px 11px;border-radius:99px;border:1px solid var(--local-border);background:rgba(255,255,255,.03);color:var(--local-muted);font-size:9.5px;cursor:pointer;transition:all .2s ease}
+.tech-tab:hover,.tech-tab.is-active{color:var(--local-fg);border-color:rgba(120,184,255,.55);background:rgba(10,132,255,.16);box-shadow:0 0 18px rgba(10,132,255,.18)}
+.tech-constellation{display:flex;flex-wrap:wrap;gap:10px;padding:18px 0}
+.tech-node{position:relative;display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border-radius:14px;border:1px solid var(--local-border);background:rgba(255,255,255,.04);color:var(--local-fg);cursor:pointer;overflow:hidden;transition:transform .24s cubic-bezier(.22,1,.36,1),border-color .24s,background-color .24s,box-shadow .24s}
+.portfolio-shell[data-theme=terang] .tech-node{background:rgba(255,255,255,.68)}
+.tech-node::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent,rgba(255,255,255,.12),transparent);transform:translateX(-100%);transition:transform .55s ease}
+.tech-node:hover::before{transform:translateX(100%)}
+.tech-node:hover{transform:translateY(-3px);border-color:var(--node-accent,#78b8ff);box-shadow:0 10px 24px rgba(0,0,0,.18),0 0 18px color-mix(in srgb,var(--node-accent,#78b8ff) 25%,transparent)}
+.tech-node.is-selected{border-color:var(--node-accent,#78b8ff);background:color-mix(in srgb,var(--node-accent,#78b8ff) 18%,var(--local-surface));box-shadow:0 0 22px color-mix(in srgb,var(--node-accent,#78b8ff) 28%,transparent)}
+.tech-node.tone-lilac{--node-accent:#b9a2ff}
+.tech-node.tone-blue{--node-accent:#78b8ff}
+.tech-node.tone-pink{--node-accent:#f09bc7}
+.tech-node.tone-mint{--node-accent:#66decf}
+.tech-node-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--node-accent);background:color-mix(in srgb,var(--node-accent) 16%,transparent);flex:0 0 auto}
+.tech-node-body{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.tech-node-body b{font-size:10.5px;font-weight:560;line-height:1.2}
+.tech-node-body small{font-size:7.5px;color:var(--local-soft);letter-spacing:.4px}
+.tech-node-pulse{width:5px;height:5px;border-radius:50%;background:var(--node-accent);opacity:.55;margin-left:2px;transition:transform .2s,opacity .2s}
+.tech-node:hover .tech-node-pulse,.tech-node.is-selected .tech-node-pulse{opacity:1;transform:scale(1.35);box-shadow:0 0 8px var(--node-accent)}
+.tech-console-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--local-border);font-size:9.5px;color:var(--local-muted)}
+.clear-tech-inline{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;border:1px solid var(--local-border);background:rgba(255,255,255,.05);color:var(--local-fg);font-size:9px;cursor:pointer}
+
+/* Compact Journey cards */
+.journey-summary{padding:18px 20px}
+.timeline-card{padding:17px 20px;margin-bottom:11px}
+
+@media(max-width:900px){
+  .about-hud{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .about-section,.projects-section,.skills-section,.journey-section{padding-top:72px}
+  .about-telemetry{grid-template-columns:1fr;gap:8px}
+  .tech-console{padding:16px 14px}
+  .tech-constellation{gap:7px;padding:14px 0}
+  .tech-node{padding:7px 10px;border-radius:11px}
+  .tech-node-icon{width:24px;height:24px}
+  .tech-node-body b{font-size:9.5px}
+}
+
+/* Modal preview proyek bergaya frameless (tanpa bingkai kotak) */
+.modal-backdrop-frameless{background:rgba(6,8,18,.78);backdrop-filter:blur(26px) saturate(140%);-webkit-backdrop-filter:blur(26px) saturate(140%)}
+.portfolio-shell[data-theme=terang] .modal-backdrop-frameless{background:rgba(240,242,250,.82)}
+.modal-frameless{width:min(740px,100%);max-height:90vh;padding:0!important;border:0!important;border-radius:24px;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;position:relative;overflow-y:auto}
+.portfolio-shell[data-theme=terang] .modal-frameless{background:transparent!important}
+.modal-close-floating{position:fixed;right:24px;top:24px;z-index:60;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18);backdrop-filter:blur(12px)}
+.portfolio-shell[data-theme=terang] .modal-close-floating{background:rgba(255,255,255,.78);border-color:rgba(60,60,80,.18)}
+.modal-hero-media{position:relative;width:100%;margin-bottom:18px;border-radius:22px;overflow:hidden}
+.modal-hero-media::after{content:"";position:absolute;inset:auto 0 0;height:48%;background:linear-gradient(to bottom,transparent,rgba(6,8,18,.85));pointer-events:none}
+.portfolio-shell[data-theme=terang] .modal-hero-media::after{background:linear-gradient(to bottom,transparent,rgba(240,242,250,.88))}
+.modal-frameless .modal-thumbnail{margin:0;border:0;border-radius:22px;max-height:320px;width:100%;object-fit:cover}
+.modal-frameless-body{padding:8px 6px 14px}
+.modal-frameless-body h2{font:500 clamp(28px,4vw,40px)/1.1 var(--font-display);letter-spacing:-1.4px;margin:8px 0 10px;text-transform:capitalize}
+.modal-lead{font-size:13px!important;line-height:1.75!important;max-width:620px;margin:0 0 14px}
+.modal-frameless .modal-meta{margin:12px 0 18px}
+.modal-frameless .modal-meta span{border:0;background:rgba(255,255,255,.07)}
+.portfolio-shell[data-theme=terang] .modal-frameless .modal-meta span{background:rgba(0,0,0,.055)}
+.modal-code-float{margin:6px 0 20px;padding:14px 16px;border-radius:16px;background:rgba(14,16,28,.65);border:0}
+.portfolio-shell[data-theme=terang] .modal-code-float{background:rgba(255,255,255,.68)}
+.modal-code-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:9px;color:var(--local-soft);font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.modal-code-head small{color:#78b8ff;font-weight:600}
+.modal-code-float pre{margin:0;font:10px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cdd6f4;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.portfolio-shell[data-theme=terang] .modal-code-float pre{color:#232638}
+.modal-frameless-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;margin-top:8px}
+.modal-frameless .modal-block{border-top:0;padding:8px 0;margin-top:0}
+.modal-frameless .modal-block h3{font-size:12px;letter-spacing:.3px;color:var(--local-fg);margin-bottom:10px}
+.modal-frameless .modal-actions{margin-top:18px}
+@media(max-width:640px){
+  .modal-frameless-grid{grid-template-columns:1fr;gap:14px}
+  .modal-close-floating{right:14px;top:14px}
+}

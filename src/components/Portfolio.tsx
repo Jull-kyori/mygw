@@ -235,9 +235,17 @@ function ProjectCard({ project, onOpen, index, dimmed = false }: { project: Proj
 
 function ProjectModal({ project, close }: { project: Project; close: () => void }) {
   const [details, setDetails] = useState<{ readme: string; languages: Record<string, number>; ok?: boolean } | null>(null);
+  const [codePreview, setCodePreview] = useState<CodePreview | null | undefined>(() => previewCache.get(project.name));
   const modalRef = useRef<HTMLDivElement>(null);
   const projectName = project.displayName || project.name;
-  useEffect(() => { let active = true; fetch(`/api/repo/${encodeURIComponent(project.name)}`).then((response) => response.json()).then((data) => { if (active) setDetails(data); }).catch(() => { if (active) setDetails({ readme: '', languages: {}, ok: false }); }); return () => { active = false; }; }, [project.name]);
+  useEffect(() => {
+    let active = true;
+    fetch(`/api/repo/${encodeURIComponent(project.name)}`).then((response) => response.json()).then((data) => { if (active) setDetails(data); }).catch(() => { if (active) setDetails({ readme: '', languages: {}, ok: false }); });
+    if (!previewCache.has(project.name)) {
+      fetch(`/api/projects/${encodeURIComponent(project.name)}/preview`).then((r) => (r.ok ? r.json() : null)).then((data: CodePreview | null) => { previewCache.set(project.name, data); if (active) setCodePreview(data); }).catch(() => { previewCache.set(project.name, null); if (active) setCodePreview(null); });
+    }
+    return () => { active = false; };
+  }, [project.name]);
   useEffect(() => {
     const oldOverflow = document.body.style.overflow; const previousFocus = document.activeElement as HTMLElement | null; document.body.style.overflow = 'hidden';
     modalRef.current?.querySelector<HTMLElement>('button')?.focus();
@@ -255,14 +263,22 @@ function ProjectModal({ project, close }: { project: Project; close: () => void 
     return () => { document.body.style.overflow = oldOverflow; window.removeEventListener('keydown', onKey); previousFocus?.focus(); };
   }, [close]);
   const total = Object.values(details?.languages || {}).reduce((sum, value) => sum + value, 0);
-  return <motion.div className="modal-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
-    <motion.div ref={modalRef} layoutId={`project-${project.id}`} className="modal glass" initial={{ y: 28, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 18, opacity: 0 }} role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button className="icon-button modal-close" onClick={close} aria-label="Tutup detail"><X size={18} /></button>{project.image && <Image className="modal-thumbnail" src={project.image} alt={`Pratinjau proyek ${projectName}`} width={1000} height={560} sizes="(max-width: 640px) 100vw, 540px" placeholder="blur" blurDataURL={blurPlaceholder} priority />}
-      <span className="eyebrow">DETAIL PROYEK</span><h2 id="modal-title">{projectName}</h2>{(project.displayDescription || project.description) && <p>{project.displayDescription || project.description}</p>}
-      <div className="modal-meta"><span>{project.language || 'Eksplorasi'}</span><span><Star size={13} /> {project.stargazers_count}</span><span>Diperbarui {new Date(project.updated_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
-      <div className="modal-block"><h3>Ringkasan proyek</h3>{details ? <p>{details.readme || (details.ok === false ? 'Informasi tambahan belum tersedia saat ini. Anda tetap dapat melihat repository proyek.' : 'Ringkasan README belum tersedia.')}</p> : <div className="skeleton-line" />}</div>
-      <div className="modal-block"><h3>Komposisi bahasa</h3>{total > 0 ? <div className="language-bars">{Object.entries(details!.languages).sort((a, b) => b[1] - a[1]).map(([language, bytes]) => <div key={language}><div><span>{language}</span><span>{Math.round(bytes / total * 100)}%</span></div><i><b style={{ width: `${bytes / total * 100}%`, background: languageColors[language] || '#a78bfa' }} /></i></div>)}</div> : <p className="muted">Statistik bahasa belum tersedia.</p>}</div>
-      <div className="modal-actions"><a className="button button-primary" href={project.html_url} target="_blank" rel="noreferrer">Kode <ArrowUpRight size={16} /></a>{(project.displayDemo || project.homepage) && <a className="button button-glass" href={project.displayDemo || project.homepage || '#'} target="_blank" rel="noreferrer">Demo <ArrowUpRight size={16} /></a>}</div>
+  return <motion.div className="modal-backdrop modal-backdrop-frameless" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
+    <motion.div ref={modalRef} layoutId={`project-${project.id}`} className="modal modal-frameless" initial={{ y: 24, scale: 0.96, opacity: 0 }} animate={{ y: 0, scale: 1, opacity: 1 }} exit={{ y: 16, scale: 0.97, opacity: 0 }} transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button className="icon-button modal-close modal-close-floating" onClick={close} aria-label="Tutup detail"><X size={18} /></button>
+      {project.image && <div className="modal-hero-media"><Image className="modal-thumbnail" src={project.image} alt={`Pratinjau proyek ${projectName}`} width={1000} height={560} sizes="(max-width: 640px) 100vw, 720px" placeholder="blur" blurDataURL={blurPlaceholder} priority /></div>}
+      <div className="modal-frameless-body">
+        <span className="eyebrow">PRATINJAU PROYEK</span>
+        <h2 id="modal-title" className="gradient-text">{projectName}</h2>
+        {(project.displayDescription || project.description) && <p className="modal-lead">{project.displayDescription || project.description}</p>}
+        <div className="modal-meta"><span><i className="language-dot" style={{ backgroundColor: languageColors[project.language || ''] || '#a5a5be' }} /> {project.language || 'Eksplorasi'}</span><span><Star size={13} /> {project.stargazers_count}</span><span>Diperbarui {new Date(project.updated_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
+        {codePreview?.code && <div className="modal-code-float"><div className="modal-code-head"><span>{codePreview.path}</span><small>{codePreview.language}</small></div><pre><code>{codePreview.code.split('\n').slice(0, 10).join('\n')}</code></pre></div>}
+        <div className="modal-frameless-grid">
+          <div className="modal-block"><h3>Ringkasan</h3>{details ? <p>{details.readme || (details.ok === false ? 'Informasi tambahan belum tersedia saat ini. Anda tetap dapat melihat repository proyek.' : 'Ringkasan README belum tersedia.')}</p> : <div className="skeleton-line" />}</div>
+          <div className="modal-block"><h3>Komposisi bahasa</h3>{total > 0 ? <div className="language-bars">{Object.entries(details!.languages).sort((a, b) => b[1] - a[1]).map(([language, bytes]) => <div key={language}><div><span>{language}</span><span>{Math.round(bytes / total * 100)}%</span></div><i><b style={{ width: `${bytes / total * 100}%`, background: languageColors[language] || '#a78bfa' }} /></i></div>)}</div> : <p className="muted">Statistik bahasa belum tersedia.</p>}</div>
+        </div>
+        <div className="modal-actions"><a className="button button-primary" href={project.html_url} target="_blank" rel="noreferrer">Buka Kode <ArrowUpRight size={16} /></a>{(project.displayDemo || project.homepage) && <a className="button button-glass" href={project.displayDemo || project.homepage || '#'} target="_blank" rel="noreferrer">Lihat Demo <ArrowUpRight size={16} /></a>}</div>
+      </div>
     </motion.div>
   </motion.div>;
 }
@@ -270,7 +286,7 @@ function ProjectModal({ project, close }: { project: Project; close: () => void 
 export default function Portfolio({ projects, profile, languages, isFallback }: Props) {
   const [active, setActive] = useState('Beranda'); const [filter, setFilter] = useState('Semua'); const [search, setSearch] = useState(''); const [selected, setSelected] = useState<Project | null>(null);
   const [theme, setTheme] = useState<'gelap' | 'terang'>('gelap'); const [copied, setCopied] = useState(false); const [role, setRole] = useState(0); const [menuOpen, setMenuOpen] = useState(false);
-  const [paletteOpen, setPaletteOpen] = useState(false); const [activeTech, setActiveTech] = useState<string | null>(null); const timelineRef = useRef<HTMLDivElement>(null);
+  const [paletteOpen, setPaletteOpen] = useState(false); const [activeTech, setActiveTech] = useState<string | null>(null); const [techCategory, setTechCategory] = useState<string>('Semua'); const timelineRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion(); const { scrollYProgress } = useScroll(); const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const { scrollYProgress: journeyProgress } = useScroll({ target: timelineRef, offset: ['start 70%', 'end 70%'] });
   const journeyScale = useSpring(useTransform(journeyProgress, [0, 1], [0, 1]), { stiffness: 80, damping: 25 });
@@ -324,7 +340,25 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
       <a href="#tentang" className="scroll-cue"><span>GULIR UNTUK MENJELAJAH</span><ArrowDown size={14} /></a></section>
 
     <section className="section-wrap about-section" id="tentang"><SectionHeading direction="left" eyebrow="SEDIKIT TENTANG SAYA" title={<>Teknologi dengan<br /><span className="gradient-text">tujuan yang berarti.</span></>} copy="Saya suka memecah persoalan menjadi pengalaman digital yang terasa sederhana, berguna, dan dekat dengan kehidupan sehari-hari." />
-      <motion.div className="about-grid" initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.15 }} variants={{ show: { transition: { staggerChildren: reduceMotion ? 0 : 0.09 } } }}><motion.div variants={revealLeft} className="about-main-wrap"><Glass className="about-main glow" {...usePointerGlow()}><span className="card-eyebrow">01 / PROFIL</span><h3 className="hover-word">Belajar, mencoba,<br />lalu membangun.</h3><p>Mahasiswa semester 7 Informatika yang selalu tertarik melihat bagaimana teknologi dapat membantu orang dan komunitas di sekitar.</p><div className="about-highlights"><div><span>DOMISILI</span><b><MapPin size={12} /> Ponorogo, Jawa Timur</b></div><div><span>FOKUS</span><b>Web · AI · IoT</b></div><div><span>STATUS</span><b>Terbuka untuk kolaborasi</b></div></div><div className="about-signature">faza<span>.</span>dev</div><span className="decor-ring" /></Glass></motion.div><motion.div variants={revealRight}><Glass className="about-campus"><span className="card-eyebrow">02 / KAMPUS</span><GraduationCap size={25} /><h3>Universitas Muhammadiyah Ponorogo</h3><p>Fakultas Teknik · Informatika</p><span className="campus-year">2022 — SEKARANG</span></Glass></motion.div><motion.div variants={revealRight} className="about-focus-wrap"><Glass className="about-focus"><span className="card-eyebrow">03 / YANG SAYA EKSPLORASI</span><div className="focus-row"><span className="focus-icon focus-web"><Code2 size={16} /></span><div><b>Web full stack</b><small>Dari ide ke produk digital</small></div><ArrowUpRight size={15} /></div><div className="focus-row"><span className="focus-icon focus-ai"><Sparkles size={16} /></span><div><b>Data & kecerdasan buatan</b><small>Deteksi video deepfake</small></div><ArrowUpRight size={15} /></div><div className="focus-row"><span className="focus-icon focus-iot"><Cpu size={16} /></span><div><b>Internet of Things</b><small>ESP32 dan perangkat cerdas</small></div><ArrowUpRight size={15} /></div></Glass></motion.div><motion.div variants={revealScale}><Glass className="stat-card stat-repos"><span className="card-eyebrow">REPOSITORY PUBLIK</span><strong>{profile?.public_repos ?? projects.length}<span>+</span></strong><p>ide yang terus tumbuh</p><Github size={19} /></Glass></motion.div><motion.div variants={revealScale}><Glass className="stat-card stat-language"><span className="card-eyebrow">BAHASA TERBANYAK</span><strong className="stat-word">{topLanguage}</strong><p>di antara proyek saya</p><span className="language-visual"><i /><i /><i /><i /><i /></span></Glass></motion.div></motion.div></section>
+      <motion.div className="about-hud" initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.15 }} variants={{ show: { transition: { staggerChildren: reduceMotion ? 0 : 0.1 } } }}>
+        <motion.div variants={revealLeft}><Glass className="about-core glow" {...usePointerGlow()}>
+          <div className="hud-header"><span className="card-eyebrow">01 / PROFIL INTI</span><span className="hud-badge"><i className="status-dot" /> AKTIF · SEMESTER 7</span></div>
+          <h3 className="hover-word">Belajar, mencoba,<br />lalu membangun.</h3>
+          <p>Mahasiswa Informatika Universitas Muhammadiyah Ponorogo (2022 — sekarang) yang berfokus pada pengembangan produk digital, kecerdasan buatan, dan perangkat IoT.</p>
+          <div className="about-telemetry">
+            <div><span>DOMISILI</span><b><MapPin size={12} /> Ponorogo, ID</b></div>
+            <div><span>REPOSITORY</span><b><Github size={12} /> {profile?.public_repos ?? projects.length}+ Publik</b></div>
+            <div><span>BAHASA UTAMA</span><b><Code2 size={12} /> {topLanguage}</b></div>
+          </div>
+          <div className="about-core-foot"><span className="about-signature">faza<span>.</span>dev</span><span className="language-visual" aria-hidden="true"><i /><i /><i /><i /><i /></span></div>
+        </Glass></motion.div>
+        <motion.div variants={revealRight}><Glass className="about-focus-hud glow" {...usePointerGlow()}>
+          <div className="hud-header"><span className="card-eyebrow">02 / BIDANG EKSPLORASI</span><span className="hud-tag">UMPO · FT</span></div>
+          <div className="focus-row"><span className="focus-icon focus-web"><Code2 size={16} /></span><div><b>Web full stack</b><small>Dari ide ke produk digital modern</small></div><ArrowUpRight size={15} /></div>
+          <div className="focus-row"><span className="focus-icon focus-ai"><Sparkles size={16} /></span><div><b>Data & kecerdasan buatan</b><small>Deteksi video deepfake & visi komputer</small></div><ArrowUpRight size={15} /></div>
+          <div className="focus-row"><span className="focus-icon focus-iot"><Cpu size={16} /></span><div><b>Internet of Things</b><small>ESP32, sensor, dan perangkat cerdas</small></div><ArrowUpRight size={15} /></div>
+        </Glass></motion.div>
+      </motion.div></section>
 
     <div className="section-divider" aria-hidden="true"><i /><span>✦</span><i /></div>
 
@@ -338,7 +372,39 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
 
     <div className="section-divider" aria-hidden="true"><i /><span>✦</span><i /></div>
 
-    <section className="section-wrap skills-section" id="keahlian"><SectionHeading direction="right" eyebrow="PERANGKAT DI MEJA KERJA" title={<>Teknologi sebagai<br /><span className="gradient-text">alat untuk berkarya.</span></>} copy="Pilih teknologi untuk melihat proyek terkait. Fokus pilihan juga akan menyoroti kartu proyek di atas." /><div className="skills-bento">{technologyGroups.map((group, index) => { const GroupIcon = group.icon; return <motion.div key={group.title} variants={index % 2 === 0 ? revealLeft : revealRight} initial={reduceMotion ? false : "hidden"} whileInView={reduceMotion ? undefined : "show"} viewport={{ once: true, amount: 0.2 }} className={`skill-group glass skill-${group.tone} skill-group-${index}`}><div className="skill-heading"><span className="skill-icon"><GroupIcon size={18} /></span><span className="card-eyebrow">0{index + 1} / KEAHLIAN</span></div><h3>{group.title}</h3><div className="tech-grid">{group.items.map((item, itemIndex) => { const TechIcon = technologyIcon(item); const selectedTech = activeTech === item; return <button key={item} className={`tech-tile ${selectedTech ? 'tech-selected' : ''}`} aria-pressed={selectedTech} onClick={() => setActiveTech(selectedTech ? null : item)} style={{ ['--phase' as string]: `${(index * 4 + itemIndex) * -0.35}s` }}><TechIcon size={16} /><span>{item}</span></button>; })}</div><div className="skill-decoration">{String(index + 1).padStart(2, '0')}</div></motion.div>; })}</div>{activeTech && <button className="clear-tech" onClick={() => setActiveTech(null)}>Hapus sorotan: {activeTech} <X size={13} /></button>}</section>
+    <section className="section-wrap skills-section" id="keahlian"><SectionHeading direction="right" eyebrow="PERANGKAT DI MEJA KERJA" title={<>Teknologi sebagai<br /><span className="gradient-text">alat untuk berkarya.</span></>} copy="Pilih node teknologi untuk menyoroti proyek terkait pada jendela repositori di atas." />
+      <motion.div variants={revealScale} initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.2 }}>
+        <Glass className="tech-console glow" {...usePointerGlow()}>
+          <div className="tech-console-head">
+            <div className="tech-console-status"><span className="status-dot" /><span>TECH MATRIX // {technologyGroups.reduce((sum, g) => sum + g.items.length, 0)} NODE AKTIF</span></div>
+            <div className="tech-tabs" role="tablist" aria-label="Kategori teknologi">
+              {['Semua', ...technologyGroups.map((g) => g.title)].map((cat) => (
+                <button key={cat} role="tab" aria-selected={techCategory === cat} className={`tech-tab ${techCategory === cat ? 'is-active' : ''}`} onClick={() => setTechCategory(cat)}>{cat}</button>
+              ))}
+            </div>
+          </div>
+          <div className="tech-constellation">
+            {technologyGroups.filter((group) => techCategory === 'Semua' || group.title === techCategory).flatMap((group) =>
+              group.items.map((item, itemIndex) => {
+                const TechIcon = technologyIcon(item);
+                const selectedTech = activeTech === item;
+                return (
+                  <button key={item} className={`tech-node tone-${group.tone} ${selectedTech ? 'is-selected' : ''}`} aria-pressed={selectedTech} onClick={() => setActiveTech(selectedTech ? null : item)} style={{ ['--phase' as string]: `${itemIndex * -0.25}s` }}>
+                    <span className="tech-node-icon"><TechIcon size={15} /></span>
+                    <span className="tech-node-body"><b>{item}</b><small>{group.title}</small></span>
+                    <i className="tech-node-pulse" aria-hidden="true" />
+                  </button>
+                );
+              })
+            )}
+          </div>
+          <div className="tech-console-foot">
+            <span>{activeTech ? `Filter aktif: ${activeTech} (${projects.filter((p) => usesTechnology(p, activeTech)).length} proyek cocok)` : 'Klik salah satu teknologi untuk menyoroti proyek terkait'}</span>
+            {activeTech && <button className="clear-tech-inline" onClick={() => setActiveTech(null)}>Reset <X size={12} /></button>}
+          </div>
+        </Glass>
+      </motion.div>
+    </section>
 
     <div className="section-divider" aria-hidden="true"><i /><span>✦</span><i /></div>
 
