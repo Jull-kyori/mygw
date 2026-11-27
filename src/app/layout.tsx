@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
+import './liquid-glass.css';
 import { site } from '@/config/site';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
