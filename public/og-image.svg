@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#10101d"/><stop offset="1" stop-color="#19162b"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#7860bd" stop-opacity=".62"/><stop offset="1" stop-color="#7860bd" stop-opacity="0"/></radialGradient>
+    <linearGradient id="text" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#d4c5ff"/><stop offset=".55" stop-color="#9bcff0"/><stop offset="1" stop-color="#f0b7dc"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><ellipse cx="940" cy="105" rx="400" ry="300" fill="url(#glow)"/><ellipse cx="100" cy="650" rx="370" ry="270" fill="#276279" opacity=".22"/>
+  <rect x="72" y="62" width="58" height="58" rx="17" fill="#c5b2ff" fill-opacity=".13" stroke="#c5b2ff" stroke-opacity=".4"/><text x="88" y="102" fill="#eee8ff" font-family="Arial,sans-serif" font-size="30" font-weight="700">F.</text>
+  <text x="152" y="98" fill="#c3b7e8" font-family="Arial,sans-serif" font-size="18" letter-spacing="4">PORTOFOLIO PRIBADI</text>
+  <text x="72" y="258" fill="#bebccc" font-family="Arial,sans-serif" font-size="28">Faza Ilmal Mughni</text>
+  <text x="70" y="352" fill="#f5f2fb" font-family="Arial,sans-serif" font-size="63" font-weight="700" letter-spacing="-3">Merancang ide menjadi</text>
+  <text x="70" y="433" fill="url(#text)" font-family="Arial,sans-serif" font-size="63" font-weight="700" letter-spacing="-3">pengalaman bermakna.</text>
+  <path d="M72 505H1128" stroke="#fff" stroke-opacity=".16"/>
+  <text x="72" y="552" fill="#aaa8bb" font-family="Arial,sans-serif" font-size="18">Informatika · UMPO · Ponorogo</text>
+  <text x="1128" y="552" fill="#aaa8bb" font-family="Arial,sans-serif" font-size="15" text-anchor="end">WEB FULL STACK  ·  DATA &amp; AI  ·  IoT</text>
+</svg>
