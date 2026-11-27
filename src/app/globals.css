@@ -199,3 +199,35 @@
 .portfolio-shell[data-theme=terang] .ambient span{opacity:.15}
 @media(max-width:900px){.skills-bento{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(205px,auto));gap:13px}.skills-bento>.skill-group,.skills-bento>.skill-group-0,.skills-bento>.skill-group-1,.skills-bento>.skill-group-2,.skills-bento>.skill-group-3{min-height:205px;padding:18px}.tech-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr))}}
 @media(max-width:640px){.skills-bento{grid-template-columns:1fr;grid-template-rows:none;gap:11px}.skills-bento>.skill-group,.skills-bento>.skill-group-0,.skills-bento>.skill-group-1,.skills-bento>.skill-group-2,.skills-bento>.skill-group-3{min-height:0;padding:17px 16px}.skill-group h3{font-size:16px;margin:13px 0 12px}.tech-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,135px),1fr));gap:7px}.tech-tile{min-height:44px;padding:8px 9px;font-size:9px}.skill-group .skill-decoration{font-size:37px}}
+
+/* Tema sistem macOS untuk seluruh halaman, di mode gelap maupun terang. */
+.portfolio-shell{--local-accent:#0a84ff;--font-body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;--font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;--local-bg:#111217;--local-fg:#f5f5f7;--local-muted:#b4b5be;--local-soft:#858791;--local-surface:rgba(42,44,53,.68);--local-border:rgba(255,255,255,.13);background:radial-gradient(ellipse at 50% -12%,rgba(91,100,140,.23),transparent 48%),linear-gradient(145deg,#111217,#15151c 54%,#101217);font-family:var(--font-body)}
+.portfolio-shell[data-theme=terang]{--local-bg:#f5f5f7;--local-fg:#1d1d1f;--local-muted:#5f6068;--local-soft:#85858d;--local-surface:rgba(255,255,255,.68);--local-border:rgba(60,60,67,.16);background:radial-gradient(ellipse at 50% -12%,#fff,transparent 48%),linear-gradient(145deg,#f5f5f7,#efeff3 58%,#f7f7f9)}
+.site-header{position:relative;top:auto;width:min(1180px,calc(100% - 32px));height:64px;margin:10px auto -74px;padding:0 18px;border:1px solid var(--local-border);border-radius:20px;background:rgba(30,32,39,.68);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);box-shadow:0 12px 38px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.1)}
+.portfolio-shell[data-theme=terang] .site-header{background:rgba(250,250,252,.72);box-shadow:0 12px 38px rgba(35,35,45,.08),inset 0 1px 0 rgba(255,255,255,.92)}
+.brand-mark{background:linear-gradient(145deg,rgba(10,132,255,.23),rgba(175,82,222,.16));border-color:rgba(106,167,255,.26);border-radius:10px}
+.nav-pill{border-radius:14px;background:rgba(255,255,255,.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.portfolio-shell[data-theme=terang] .nav-pill{background:rgba(240,240,245,.72)}
+.nav-pill a,.nav-active{border-radius:10px}.nav-active{background:rgba(10,132,255,.16);border-color:rgba(10,132,255,.16)}
+.icon-button{border-radius:12px;background:rgba(255,255,255,.055)}
+.portfolio-shell[data-theme=terang] .icon-button{background:rgba(245,245,248,.78)}
+.button{border-radius:12px}.button-primary{color:#fff;background:linear-gradient(180deg,#3294ff,#0878ee);box-shadow:0 7px 22px rgba(10,132,255,.22)}
+.button-primary:hover{box-shadow:0 10px 28px rgba(10,132,255,.32)}
+.button-glass{background:rgba(255,255,255,.07);border-color:var(--local-border)}
+.portfolio-shell[data-theme=terang] .button-glass{background:rgba(255,255,255,.65)}
+.glass{border-color:var(--local-border);border-radius:22px;background:var(--local-surface);backdrop-filter:blur(28px) saturate(175%);-webkit-backdrop-filter:blur(28px) saturate(175%);box-shadow:0 18px 48px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.11)}
+.portfolio-shell[data-theme=terang] .glass{box-shadow:0 18px 48px rgba(35,35,45,.075),inset 0 1px 0 rgba(255,255,255,.92)}
+.filter-chip{border-radius:10px;background:rgba(255,255,255,.045)}
+.filter-chip:hover,.filter-chip.selected{border-color:rgba(10,132,255,.42);background:rgba(10,132,255,.17)}
+.search-box,.tech-tile,.focus-icon,.skill-icon{border-radius:12px}
+.project-count span{color:#64aaff}
+.gradient-text{background-image:linear-gradient(105deg,#78b8ff 0%,#bd9cff 48%,#f09bc7 100%)}
+.scroll-progress{background:linear-gradient(90deg,#0a84ff,#30c7b5,#bf5af2,#ff6b85)}
+.ambient span:nth-child(1){background:#7655d8}.ambient span:nth-child(2){background:#168fb4}.ambient span:nth-child(3){background:#c44882}.ambient span:nth-child(4){background:#c58432}
+.portfolio-shell[data-theme=terang] .ambient span{opacity:.12}
+.palette,.modal{border:1px solid var(--local-border);backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%)}
+.portfolio-shell[data-theme=terang] .palette{border-color:rgba(60,60,67,.14);box-shadow:0 35px 100px rgba(25,25,35,.18)}
+.site-footer{border-color:var(--local-border)}
+@media(max-width:900px){.site-header{width:calc(100% - 36px);padding:0 14px}}
+@media(max-width:640px){.site-header{top:7px;width:calc(100% - 24px);height:56px;margin:7px auto -63px;padding:0 12px;border-radius:17px}.nav-pill{border-radius:15px}.nav-pill a{border-radius:10px}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.portfolio-shell[data-theme=terang] .glass,.portfolio-shell[data-theme=terang] .nav-pill,.portfolio-shell[data-theme=terang] .button-glass,.portfolio-shell[data-theme=terang] .site-header{background:rgba(250,250,252,.96)}}
