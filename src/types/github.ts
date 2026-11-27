@@ -4,4 +4,4 @@ export type GitHubRepo = {
   homepage: string | null; fork: boolean; archived: boolean;
 };
 export type GitHubProfile = { public_repos: number; followers: number; avatar_url?: string };
-export type Project = GitHubRepo & { displayName?: string; displayDescription?: string; displayDemo?: string; image?: string; featured: boolean; fallback?: boolean };
+export type Project = GitHubRepo & { displayName?: string; displayDescription?: string; displayDemo?: string; image?: string; tech?: string[]; featured: boolean; fallback?: boolean };

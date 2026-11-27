@@ -94,6 +94,23 @@ Edit **`src/config/featured.ts`** dan tulis nama repository persis seperti di Gi
 
 Proyek unggulan akan ditampilkan lebih menonjol. Letakkan gambar lokal di folder `public/images/`.
 
+### Thumbnail dan teknologi proyek
+
+Setiap proyek memakai gambar dari urutan berikut: nilai `image` pada konfigurasi unggulan, berkas lokal `public/projects/<nama-repo>.png`, lalu gambar Open Graph GitHub. Berkas lokal harus memakai nama repository yang sama persis, termasuk kapitalisasi. Tambahkan `tech` untuk menghubungkan kartu proyek dengan sorotan teknologi pada bagian Keahlian.
+
+```ts
+{
+  repo: 'chat-bot-ai',
+  title: 'Chatbot AI',
+  description: 'Asisten percakapan berbasis kecerdasan buatan.',
+  image: '/projects/chatbot-ai.webp',
+  demo: 'https://contoh-demo.vercel.app',
+  tech: ['Next.js', 'TypeScript', 'AI'],
+}
+```
+
+`title`, `description`, `image`, `demo`, dan `tech` bersifat opsional. Tanpa `title`, nama repository otomatis dirapikan menjadi Title Case. Tanpa `image`, sistem mencoba gambar lokal PNG, kemudian memakai gambar Open Graph GitHub.
+
 ## 🐙 GitHub API dan token
 
 Repository publik diambil di **server** dari akun pada `githubUsername`. Fork dan repository arsip disembunyikan; proyek unggulan diprioritaskan, lalu diurutkan berdasarkan bintang dan waktu pembaruan. Data repository di-cache selama satu jam.
@@ -111,6 +128,17 @@ Token bersifat **opsional** untuk daftar repository publik. Tanpa token, GitHub 
 Jangan menambahkan awalan `NEXT_PUBLIC_` pada token dan jangan pernah mengunggah `.env.local` ke Git. Saat deploy, masukkan `GITHUB_TOKEN` melalui pengaturan Environment Variables di Vercel.
 
 Jika API gagal atau batas permintaan tercapai, situs memakai data di **`src/data/fallback-projects.json`**.
+
+## ⌨️ Pintasan keyboard
+
+| Pintasan | Aksi |
+| --- | --- |
+| `Ctrl + K` atau `⌘ + K` | Membuka pencarian cepat |
+| `↑` / `↓` | Memilih hasil pencarian |
+| `Enter` | Menjalankan hasil yang dipilih |
+| `Esc` | Menutup pencarian atau panel detail proyek |
+
+Pencarian cepat juga dapat dibuka lewat tombol kaca pembesar di navbar. Kontak email dan LinkedIn yang kosong disembunyikan otomatis; isi nilainya di `src/config/site.ts` jika ingin menampilkannya.
 
 ## ☁️ Deploy ke Vercel
 
