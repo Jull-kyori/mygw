@@ -67,7 +67,12 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
   const [theme, setTheme] = useState<'gelap' | 'terang'>('gelap'); const [copied, setCopied] = useState(false); const [role, setRole] = useState(0); const [menuOpen, setMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion(); const { scrollYProgress } = useScroll(); const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const roles = ['Pengembang Full Stack', 'Penjelajah Data & AI', 'Perakit IoT']; const links = ['Beranda', 'Tentang', 'Proyek', 'Keahlian', 'Perjalanan', 'Kontak'];
-  useEffect(() => { const timer = window.setInterval(() => setRole((current) => (current + 1) % roles.length), 2900); return () => window.clearInterval(timer); }, []);
+  useEffect(() => {
+    // Hentikan pergantian otomatis saat pengunjung meminta gerakan yang lebih sedikit.
+    if (reduceMotion) return;
+    const timer = window.setInterval(() => setRole((current) => (current + 1) % roles.length), 2900);
+    return () => window.clearInterval(timer);
+  }, [reduceMotion, roles.length]);
   useEffect(() => { const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) setActive(entry.target.id); }), { rootMargin: '-35% 0px -55% 0px' }); links.forEach((label) => { const element = document.getElementById(label === 'Beranda' ? 'beranda' : label.toLowerCase()); if (element) observer.observe(element); }); return () => observer.disconnect(); }, []);
   const filters = useMemo(() => ['Semua', ...new Set([...languages, ...projects.flatMap((project) => project.topics || [])])], [languages, projects]);
   const visibleProjects = useMemo(() => projects.filter((project) => (filter === 'Semua' || project.language === filter || project.topics?.includes(filter.toLowerCase())) && `${project.name} ${project.description || ''} ${(project.topics || []).join(' ')}`.toLowerCase().includes(search.toLowerCase())), [projects, filter, search]);
