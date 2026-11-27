@@ -9,6 +9,8 @@ export const site = {
   instagramHandle: '@fazailmal',
   tiktok: 'https://tiktok.com/@fazailmal',
   tiktokHandle: '@fazailmal',
+  whatsapp: '',
+  cvUrl: '',
   linkedin: '',
   url: 'https://faza-portfolio.vercel.app',
 };
