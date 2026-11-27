@@ -1,4 +1,23 @@
-﻿# Faza Ilmal Mughni · Portofolio
+# Faza Ilmal Mughni · Portofolio
+
+<style>
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+.animated-header {
+  animation: gradientBG 5s ease infinite;
+  background: linear-gradient(-45deg, #ff6b6b, #f8e71c, #4a90e2, #8e44ad);
+  background-size: 400% 400%;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+</style>
+
+<div class="animated-header">Faza Ilmal Mughni · Portofolio</div>
 
 <div align="center">
 
