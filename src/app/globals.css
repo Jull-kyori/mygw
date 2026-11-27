@@ -231,3 +231,31 @@
 @media(max-width:900px){.site-header{width:calc(100% - 36px);padding:0 14px}}
 @media(max-width:640px){.site-header{top:7px;width:calc(100% - 24px);height:56px;margin:7px auto -63px;padding:0 12px;border-radius:17px}.nav-pill{border-radius:15px}.nav-pill a{border-radius:10px}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.portfolio-shell[data-theme=terang] .glass,.portfolio-shell[data-theme=terang] .nav-pill,.portfolio-shell[data-theme=terang] .button-glass,.portfolio-shell[data-theme=terang] .site-header{background:rgba(250,250,252,.96)}}
+/* Samakan kartu di hero, profil, perjalanan, dan kontak dengan material macOS. */
+.hero-orb{border-radius:30px!important;transform:none;background:linear-gradient(145deg,rgba(111,133,190,.19),rgba(42,45,55,.7) 55%,rgba(136,96,173,.13))!important;box-shadow:0 28px 80px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.18)}
+.portfolio-shell[data-theme=terang] .hero-orb{background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(239,241,247,.78) 55%,rgba(240,229,247,.72))!important;box-shadow:0 28px 80px rgba(43,43,55,.12),inset 0 1px 0 #fff}
+.orbit{border-color:rgba(110,165,235,.14)}
+.about-main{background:linear-gradient(145deg,rgba(125,103,205,.16),var(--local-surface) 70%)}
+.about-campus{background:linear-gradient(145deg,rgba(49,146,205,.13),var(--local-surface) 75%)}
+.about-campus>svg{color:#75bdff}
+.about-focus{background:linear-gradient(145deg,rgba(198,96,157,.12),var(--local-surface) 75%)}
+.stat-repos{background:linear-gradient(145deg,rgba(151,106,222,.15),var(--local-surface) 75%)}
+.stat-language{background:linear-gradient(145deg,rgba(42,163,151,.14),var(--local-surface) 75%)}
+.timeline-card{border-radius:20px;background:linear-gradient(145deg,rgba(94,132,195,.1),var(--local-surface) 68%)}
+.timeline-item:nth-child(even) .timeline-card{background:linear-gradient(145deg,rgba(169,98,177,.11),var(--local-surface) 68%)}
+.timeline-progress{background:linear-gradient(#0a84ff,#30c7b5,#bf5af2);box-shadow:0 0 12px rgba(10,132,255,.28)}
+.timeline-dot{background:#0a84ff;border-color:rgba(255,255,255,.6)}
+.contact-panel{background:linear-gradient(125deg,rgba(10,132,255,.13),var(--local-surface) 48%,rgba(191,90,242,.11))!important;border-radius:26px}
+.contact-links{border-radius:18px;background:rgba(255,255,255,.055)}
+.contact-links>a>span{color:#68aaff;background:rgba(10,132,255,.1);border-radius:11px}
+.status-pill{background:rgba(48,199,181,.075);border-color:rgba(48,199,181,.2)}
+.status-pill .status-dot{background:#30c7b5;box-shadow:0 0 10px rgba(48,199,181,.65)}
+.social-links a:hover,.back-top:hover{color:#64aaff}
+.portfolio-shell[data-theme=terang] .about-campus{background:linear-gradient(145deg,rgba(91,178,236,.13),rgba(255,255,255,.7) 75%)}
+.portfolio-shell[data-theme=terang] .about-focus{background:linear-gradient(145deg,rgba(226,139,183,.12),rgba(255,255,255,.7) 75%)}
+.portfolio-shell[data-theme=terang] .stat-repos{background:linear-gradient(145deg,rgba(169,133,236,.14),rgba(255,255,255,.7) 75%)}
+.portfolio-shell[data-theme=terang] .stat-language{background:linear-gradient(145deg,rgba(82,197,174,.13),rgba(255,255,255,.7) 75%)}
+.portfolio-shell[data-theme=terang] .timeline-card{background:linear-gradient(145deg,rgba(105,166,224,.12),rgba(255,255,255,.72) 72%)}
+.portfolio-shell[data-theme=terang] .timeline-item:nth-child(even) .timeline-card{background:linear-gradient(145deg,rgba(210,131,183,.12),rgba(255,255,255,.72) 72%)}
+.portfolio-shell[data-theme=terang] .contact-panel{background:linear-gradient(125deg,rgba(10,132,255,.1),rgba(255,255,255,.75) 48%,rgba(191,90,242,.09))!important}
+@media(max-width:640px){.hero-orb{border-radius:26px!important}.contact-panel{border-radius:22px}}
