@@ -46,6 +46,7 @@ function StarField({ reduced }: { reduced: boolean }) {
         ctx.fillStyle = `rgba(210,200,255,${Math.max(0, Math.min(1, opacity))})`;
         ctx.fill();
         s.y -= s.speed;
+        s.x += Math.sin(t * 0.8 + s.phase) * 0.14;
         if (s.y < -4) { s.y = window.innerHeight * 0.75; s.x = Math.random() * window.innerWidth; }
       });
       raf = requestAnimationFrame(draw);
@@ -111,10 +112,11 @@ const achievements = [
   { title: 'Riset Deteksi Deepfake Video', issuer: 'AI · Python & TensorFlow', year: 'Proyek AI' },
   { title: 'Prototipe Sistem IoT ESP32', issuer: 'Otomasi & Sensor Cerdas', year: 'Hardware' },
 ];
-const reveal = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } };
-const revealLeft = { hidden: { opacity: 0, x: -38 }, show: { opacity: 1, x: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } };
-const revealRight = { hidden: { opacity: 0, x: 38 }, show: { opacity: 1, x: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } };
-const revealScale = { hidden: { opacity: 0, scale: 0.91 }, show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } };
+const waveEase = [0.16, 1, 0.3, 1] as const;
+const reveal = { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.95, ease: waveEase } } };
+const revealLeft = { hidden: { opacity: 0, x: -24 }, show: { opacity: 1, x: 0, transition: { duration: 0.95, ease: waveEase } } };
+const revealRight = { hidden: { opacity: 0, x: 24 }, show: { opacity: 1, x: 0, transition: { duration: 0.95, ease: waveEase } } };
+const revealScale = { hidden: { opacity: 0, scale: 0.95 }, show: { opacity: 1, scale: 1, transition: { duration: 0.9, ease: waveEase } } };
 const revealVariants = { up: reveal, left: revealLeft, right: revealRight, scale: revealScale };
 type CodePreview = { path: string; language: string; code: string };
 const previewCache = new Map<string, CodePreview | null>();
@@ -136,10 +138,10 @@ function CustomCursor({ reduced }: { reduced: boolean }) {
   const [visible, setVisible] = useState(false);
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
-  const ringX = useSpring(rawX, { stiffness: 320, damping: 28, mass: 0.45 });
-  const ringY = useSpring(rawY, { stiffness: 320, damping: 28, mass: 0.45 });
-  const dotX = useSpring(rawX, { stiffness: 900, damping: 38, mass: 0.15 });
-  const dotY = useSpring(rawY, { stiffness: 900, damping: 38, mass: 0.15 });
+  const ringX = useSpring(rawX, { stiffness: 170, damping: 26, mass: 0.6 });
+  const ringY = useSpring(rawY, { stiffness: 170, damping: 26, mass: 0.6 });
+  const dotX = useSpring(rawX, { stiffness: 520, damping: 34, mass: 0.2 });
+  const dotY = useSpring(rawY, { stiffness: 520, damping: 34, mass: 0.2 });
 
   useEffect(() => {
     if (reduced || typeof window === 'undefined') return;
@@ -194,7 +196,7 @@ function CustomCursor({ reduced }: { reduced: boolean }) {
 
 function MagneticLink({ href, children, className, reduced }: { href: string; children: React.ReactNode; className: string; reduced: boolean }) {
   const rawX = useMotionValue(0); const rawY = useMotionValue(0);
-  const x = useSpring(rawX, { stiffness: 180, damping: 18 }); const y = useSpring(rawY, { stiffness: 180, damping: 18 });
+  const x = useSpring(rawX, { stiffness: 120, damping: 22, mass: 0.5 }); const y = useSpring(rawY, { stiffness: 120, damping: 22, mass: 0.5 });
   return <motion.a href={href} className={className} style={reduced ? undefined : { x, y }} onPointerMove={(event) => {
     if (reduced || event.pointerType !== 'mouse') return;
     const rect = event.currentTarget.getBoundingClientRect(); rawX.set((event.clientX - rect.left - rect.width / 2) * 0.12); rawY.set((event.clientY - rect.top - rect.height / 2) * 0.16);
@@ -304,7 +306,7 @@ function ProjectCard({ project, onOpen, index, dimmed = false }: { project: Proj
     setTilt({ x: 0, y: 0 });
   };
 
-  return <motion.article layout layoutId={`project-${project.id}`} variants={cardVariant} initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.15 }} transition={{ delay: reduceMotion ? 0 : Math.min(index * 0.045, 0.2) }} className={`project-card glass glow ${featured ? 'featured-card' : ''} ${dimmed ? 'project-dimmed' : ''}`} {...pointer}
+  return <motion.article layout layoutId={`project-${project.id}`} variants={cardVariant} initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.9, ease: waveEase, delay: reduceMotion ? 0 : Math.min(index * 0.08, 0.32) }} className={`project-card glass glow ${featured ? 'featured-card' : ''} ${dimmed ? 'project-dimmed' : ''}`} {...pointer}
     onMouseEnter={handleEnter}
     onMouseMove={(event) => { pointer.onPointerMove(event); if (reduceMotion) return; const rect = event.currentTarget.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width - 0.5; const y = (event.clientY - rect.top) / rect.height - 0.5; setTilt({ x: y * -5, y: x * 6 }); event.currentTarget.style.setProperty('--px', `${x * 12}px`); event.currentTarget.style.setProperty('--py', `${y * 8}px`); }}
     onMouseLeave={handleLeave} style={{ transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}>
@@ -399,9 +401,9 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
   const [theme, setTheme] = useState<'gelap' | 'terang'>('gelap'); const [copied, setCopied] = useState(false); const [role, setRole] = useState(0); const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false); const [activeTech, setActiveTech] = useState<string | null>(null); const [techCategory, setTechCategory] = useState<string>('Semua'); const [showTop, setShowTop] = useState(false); const [wibTime, setWibTime] = useState(''); const [cvOpen, setCvOpen] = useState(false); const [msgName, setMsgName] = useState(''); const [msgText, setMsgText] = useState(''); const timelineRef = useRef<HTMLDivElement>(null);
   const [themeRipple, setThemeRipple] = useState<{ x: number; y: number; active: boolean }>({ x: 0, y: 0, active: false });
-  const reduceMotion = useReducedMotion(); const { scrollYProgress } = useScroll(); const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const reduceMotion = useReducedMotion(); const { scrollYProgress } = useScroll(); const progress = useSpring(scrollYProgress, { stiffness: 65, damping: 24, restDelta: 0.001 });
   const { scrollYProgress: journeyProgress } = useScroll({ target: timelineRef, offset: ['start 70%', 'end 70%'] });
-  const journeyScale = useSpring(useTransform(journeyProgress, [0, 1], [0, 1]), { stiffness: 80, damping: 25 });
+  const journeyScale = useSpring(useTransform(journeyProgress, [0, 1], [0, 1]), { stiffness: 55, damping: 22 });
   const roles = ['Pengembang Full Stack', 'Penjelajah Data & AI', 'Perakit IoT']; const links = ['Beranda', 'Tentang', 'Proyek', 'Keahlian', 'Perjalanan', 'Kontak'];
   useEffect(() => {
     const saved = window.localStorage.getItem('faza-theme');
@@ -424,8 +426,8 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
     // Delay actual theme switch to let ripple start
     window.setTimeout(() => {
       setTheme((current) => { const next = current === 'gelap' ? 'terang' : 'gelap'; window.localStorage.setItem('faza-theme', next); return next; });
-    }, 80);
-    window.setTimeout(() => setThemeRipple(r => ({ ...r, active: false })), 700);
+    }, 110);
+    window.setTimeout(() => setThemeRipple(r => ({ ...r, active: false })), 900);
   }
   useEffect(() => {
     const onShortcut = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setPaletteOpen((open) => !open); } };
@@ -462,7 +464,6 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
   return <main data-theme={theme} className="portfolio-shell">
     <div className="ambient"><span /><span /><span /><span /></div><div className="bg-grid-pattern" aria-hidden="true" /><div className="bg-ornaments" aria-hidden="true"><span className="ornament-ring ring-1" /><span className="ornament-ring ring-2" /><span className="ornament-cross cross-1">+</span><span className="ornament-cross cross-2">✦</span></div><div className="noise" />
     <motion.div className="scroll-progress" style={{ scaleX: progress }} />
-    <div className="cursor-glow" aria-hidden="true" />
     {/* Theme ripple overlay — expands from click point */}
     {themeRipple.active && !reduceMotion && (
       <span
@@ -578,9 +579,11 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
       </form>
       {copied && <span className="copy-toast" role="status">Email tersalin</span>}</div><div className="contact-links"><span className="card-eyebrow">TEMUKAN SAYA DI</span><div className="contact-links-grid"><a className="contact-card link-github" href={`https://github.com/${site.githubUsername}`} target="_blank" rel="noreferrer"><span><Github size={18} /></span><div><b>GitHub</b><small>@{site.githubUsername}</small></div><ArrowUpRight size={16} /></a>{site.instagram && <a className="contact-card link-ig" href={site.instagram} target="_blank" rel="noreferrer"><span><Instagram size={18} /></span><div><b>Instagram</b><small>{site.instagramHandle || 'Lihat profil'}</small></div><ArrowUpRight size={16} /></a>}{site.tiktok && <a className="contact-card link-tiktok" href={site.tiktok} target="_blank" rel="noreferrer"><span><TikTokIcon size={18} /></span><div><b>TikTok</b><small>{site.tiktokHandle || 'Konten & eksplorasi'}</small></div><ArrowUpRight size={16} /></a>}{site.email && <a className="contact-card link-email" href={`mailto:${site.email}`}><span><Mail size={18} /></span><div><b>Email</b><small>{site.email}</small></div><ArrowUpRight size={16} /></a>}{site.linkedin && <a className="contact-card link-linkedin" href={site.linkedin} target="_blank" rel="noreferrer"><span><Linkedin size={18} /></span><div><b>LinkedIn</b><small>Terhubung secara profesional</small></div><ArrowUpRight size={16} /></a>}</div></div></Glass></motion.div></section>
     <div className="footer-wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 54" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,32 C240,54 480,0 720,32 C960,54 1200,0 1440,32 L1440,54 L0,54 Z" fill="rgba(255,255,255,0.03)" />
-        <path d="M0,42 C360,20 720,54 1080,24 C1260,12 1380,38 1440,42 L1440,54 L0,54 Z" fill="rgba(185,162,255,0.04)" />
+      <svg className="wave-layer wave-back" viewBox="0 0 2880 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,32 C240,60 480,4 720,32 C960,60 1200,4 1440,32 C1680,60 1920,4 2160,32 C2400,60 2640,4 2880,32 L2880,64 L0,64 Z" fill="rgba(185,162,255,0.05)" />
+      </svg>
+      <svg className="wave-layer wave-front" viewBox="0 0 2880 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,42 C360,14 720,62 1080,34 C1260,20 1380,48 1440,42 C1800,14 2160,62 2520,34 C2700,20 2820,48 2880,42 L2880,64 L0,64 Z" fill="rgba(100,220,215,0.045)" />
       </svg>
     </div>
     <footer className="site-footer"><a href="#beranda" className="brand"><span className="brand-mark">F<span>.</span></span><span>Faza<span className="brand-last"> Mughni</span></span></a><span>Dibuat dengan rasa ingin tahu <span className="footer-heart">✳</span> dari Ponorogo</span><a className="back-top" href="#beranda">Kembali ke atas <ArrowUpRight size={14} /></a><small>© {new Date().getFullYear()} FAZA ILMAL MUGHNI</small></footer>

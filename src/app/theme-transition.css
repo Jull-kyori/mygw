@@ -3,17 +3,17 @@
    Efek ripple dari titik klik + transisi semua properti warna
    ============================================================ */
 
-/* ── 1. Global color/surface transition — semua elemen berubah warna perlahan ── */
+/* ── 1. Global color/surface transition — semua elemen berubah warna perlahan seperti ombak ── */
 *,
 *::before,
 *::after {
   transition:
-    background-color 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color     0.55s cubic-bezier(0.4, 0, 0.2, 1),
-    color            0.45s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow       0.55s cubic-bezier(0.4, 0, 0.2, 1),
-    fill             0.45s cubic-bezier(0.4, 0, 0.2, 1),
-    stroke           0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color     0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    color            0.60s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow       0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    fill             0.60s cubic-bezier(0.22, 1, 0.36, 1),
+    stroke           0.60s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Kecualikan properti transform & opacity dari transisi global
@@ -44,7 +44,7 @@
   left: var(--rx, 50%);
   top:  var(--ry, 50%);
   transform: translate(-50%, -50%) scale(0);
-  animation: theme-ripple-expand 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: theme-ripple-expand 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Ripple menuju gelap → lingkaran gelap */
@@ -58,9 +58,9 @@
 }
 
 @keyframes theme-ripple-expand {
-  0%   { transform: translate(-50%, -50%) scale(0);    opacity: 1; }
-  60%  { transform: translate(-50%, -50%) scale(2800); opacity: 0.85; }
-  100% { transform: translate(-50%, -50%) scale(3200); opacity: 0; }
+  0%   { transform: translate(-50%, -50%) scale(0);    opacity: 0.95; }
+  65%  { transform: translate(-50%, -50%) scale(2800); opacity: 0.75; }
+  100% { transform: translate(-50%, -50%) scale(3400); opacity: 0; }
 }
 
 /* ── 3. Shell transition — background, warna, shadow halus ── */
