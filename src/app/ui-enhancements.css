@@ -236,7 +236,6 @@
 /* ── Hover Word Highlight Effect ── */
 .hover-word {
   position: relative;
-  display: inline;
   cursor: default;
 }
 
