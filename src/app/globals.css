@@ -120,3 +120,62 @@
 .profile-photo{display:block;width:100%;height:100%;object-fit:cover;object-position:center 38%;filter:brightness(1.12) contrast(1.04) saturate(.88);}
 .portfolio-shell[data-theme=terang] .profile-photo-wrap{border-color:rgba(115,96,160,.24);box-shadow:0 16px 38px rgba(73,63,103,.16),inset 0 1px 0 rgba(255,255,255,.55)}
 @media(max-width:640px){.profile-photo-wrap{border-radius:19px}.profile-photo{object-position:center 36%}}
+
+/* Warna aksen yang lebih beragam dan daftar proyek ringkas. */
+.ambient span{opacity:.3}
+.ambient span:nth-child(1){background:#8057f5}
+.ambient span:nth-child(2){background:#18a9c5}
+.ambient span:nth-child(3){background:#db4f9b}
+.ambient span:nth-child(4){background:#d78d3c}
+.projects-subheading{display:flex;align-items:center;gap:13px;margin:23px 0 13px;color:var(--local-soft);font-size:8px;font-weight:650;letter-spacing:1.35px}
+.projects-subheading i{height:1px;flex:1;background:linear-gradient(90deg,rgba(173,145,255,.4),rgba(75,205,218,.22),transparent)}
+.featured-bento-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(0,auto);gap:15px;perspective:none}
+.featured-bento-grid>.project-card,.featured-bento-grid>.project-card:first-child{grid-column:auto;grid-row:auto;min-height:340px;overflow:hidden}
+.featured-bento-grid>.project-card:first-child .project-image-wrap,.featured-bento-grid .project-image-wrap{height:145px}
+.featured-bento-grid>.project-card:first-child h3{font-size:18px}
+.featured-bento-grid>.project-card:nth-child(3n+1){background:linear-gradient(145deg,rgba(150,104,255,.19),var(--local-surface) 68%)!important;border-color:rgba(175,143,255,.24)}
+.featured-bento-grid>.project-card:nth-child(3n+2){background:linear-gradient(145deg,rgba(56,190,210,.16),var(--local-surface) 68%)!important;border-color:rgba(97,210,218,.22)}
+.featured-bento-grid>.project-card:nth-child(3n){background:linear-gradient(145deg,rgba(239,122,174,.16),var(--local-surface) 68%)!important;border-color:rgba(239,153,193,.23)}
+.projects-more{margin-top:34px;padding:18px 19px 16px;border:1px solid var(--local-border);border-radius:21px;background:linear-gradient(120deg,rgba(73,180,202,.075),rgba(255,255,255,.018) 45%,rgba(214,111,176,.06))}
+.projects-more-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.projects-more-heading h3{margin:4px 0 0;font:500 17px var(--font-display);letter-spacing:-.35px}
+.projects-more-count{padding:6px 9px;border:1px solid var(--local-border);border-radius:99px;color:var(--local-muted);font-size:8px}
+.projects-more-scroll{max-height:470px;overflow:auto;overscroll-behavior:contain;padding:1px 8px 9px 1px;scrollbar-width:thin;scrollbar-color:rgba(164,139,242,.48) transparent}
+.projects-more-scroll::-webkit-scrollbar{width:7px}
+.projects-more-scroll::-webkit-scrollbar-track{background:transparent}
+.projects-more-scroll::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:99px;background:linear-gradient(#9c79f4,#42b9c9,#e47fb3) padding-box}
+.projects-more .projects-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.projects-more .project-card{min-height:250px}
+.portfolio-shell[data-theme=terang] .ambient span{opacity:.21}
+.portfolio-shell[data-theme=terang] .projects-more{background:linear-gradient(120deg,rgba(67,172,194,.09),rgba(255,255,255,.48) 48%,rgba(207,102,162,.075))}
+@media(max-width:900px){.featured-bento-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.featured-bento-grid>.project-card,.featured-bento-grid>.project-card:first-child{min-height:325px}.projects-more-scroll{max-height:440px}}
+@media(max-width:640px){.featured-bento-grid{grid-template-columns:1fr;gap:11px}.featured-bento-grid>.project-card,.featured-bento-grid>.project-card:first-child{min-height:300px}.featured-bento-grid .project-image-wrap,.featured-bento-grid>.project-card:first-child .project-image-wrap{height:145px}.projects-more{margin-top:26px;padding:15px 13px 12px;border-radius:17px}.projects-more-scroll{max-height:420px;padding-right:6px}.projects-more .projects-grid{grid-template-columns:1fr;gap:10px}.projects-more .project-card{min-height:240px}.projects-more-heading h3{font-size:15px}.projects-subheading{margin-top:18px}}
+
+/* Tampilan repositori terinspirasi jendela macOS; gambar kartu disembunyikan. */
+.mac-project-window{overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 28px 80px rgba(0,0,0,.19),inset 0 1px 0 rgba(255,255,255,.1);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.mac-window-titlebar{height:45px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;padding:0 16px;border-bottom:1px solid var(--local-border);background:rgba(255,255,255,.035)}
+.mac-window-controls{display:flex;align-items:center;gap:7px}
+.mac-window-controls i{width:11px;height:11px;border-radius:50%;background:#ff5f57;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.mac-window-controls i:nth-child(2){background:#febc2e}.mac-window-controls i:nth-child(3){background:#28c840}
+.mac-window-label{display:flex;justify-content:center;align-items:center;gap:7px;color:var(--local-muted);font-size:9px;font-weight:550;white-space:nowrap}
+.mac-window-label svg{color:#aeb4c7}.mac-window-spacer{min-width:28px}
+.mac-project-window .project-tools{padding:16px 20px 12px;margin:0}
+.mac-project-window .projects-subheading{margin:14px 20px 12px}
+.mac-project-window .featured-bento-grid{padding:0 20px 20px}
+.mac-project-window .featured-bento-grid>.project-card,.mac-project-window .featured-bento-grid>.project-card:first-child{min-height:255px;border-radius:17px;background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.12);box-shadow:0 8px 24px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.08)}
+.mac-project-window .featured-bento-grid>.project-card:nth-child(3n+1){background:linear-gradient(145deg,rgba(137,112,220,.14),rgba(255,255,255,.035) 75%)!important;border-color:rgba(174,153,237,.2)}
+.mac-project-window .featured-bento-grid>.project-card:nth-child(3n+2){background:linear-gradient(145deg,rgba(83,166,194,.13),rgba(255,255,255,.035) 75%)!important;border-color:rgba(127,190,211,.19)}
+.mac-project-window .featured-bento-grid>.project-card:nth-child(3n){background:linear-gradient(145deg,rgba(196,115,158,.12),rgba(255,255,255,.035) 75%)!important;border-color:rgba(216,151,184,.18)}
+.mac-project-window .featured-bento-grid .project-image-wrap,.mac-project-window .project-image-wrap{display:none}
+.mac-project-window .featured-bento-grid .project-card h3{margin-top:17px}
+.mac-project-window .projects-more{margin:0 20px 20px;padding:16px 16px 12px;border-radius:17px;background:rgba(0,0,0,.09)}
+.mac-project-window .projects-more .project-card{min-height:225px;border-radius:15px;background:rgba(255,255,255,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.mac-project-window .empty-state{margin:10px 20px 20px}
+.portfolio-shell[data-theme=terang] .mac-project-window{border-color:rgba(70,67,84,.13);background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(244,244,249,.78));box-shadow:0 24px 70px rgba(43,42,58,.1),inset 0 1px 0 rgba(255,255,255,.9)}
+.portfolio-shell[data-theme=terang] .mac-window-titlebar{background:rgba(238,238,244,.52)}
+.portfolio-shell[data-theme=terang] .mac-project-window .featured-bento-grid>.project-card,.portfolio-shell[data-theme=terang] .mac-project-window .projects-more .project-card{background:rgba(255,255,255,.66)!important;border-color:rgba(76,75,94,.12);box-shadow:0 8px 22px rgba(45,43,60,.055),inset 0 1px 0 rgba(255,255,255,.95)}
+.portfolio-shell[data-theme=terang] .mac-project-window .featured-bento-grid>.project-card:nth-child(3n+1){background:linear-gradient(145deg,rgba(157,129,239,.15),rgba(255,255,255,.72) 75%)!important}
+.portfolio-shell[data-theme=terang] .mac-project-window .featured-bento-grid>.project-card:nth-child(3n+2){background:linear-gradient(145deg,rgba(84,190,212,.14),rgba(255,255,255,.72) 75%)!important}
+.portfolio-shell[data-theme=terang] .mac-project-window .featured-bento-grid>.project-card:nth-child(3n){background:linear-gradient(145deg,rgba(232,140,183,.14),rgba(255,255,255,.72) 75%)!important}
+.portfolio-shell[data-theme=terang] .mac-project-window .projects-more{background:rgba(238,238,246,.62)}
+@media(max-width:640px){.mac-project-window{border-radius:18px}.mac-window-titlebar{height:40px;padding:0 12px}.mac-project-window .project-tools{padding:13px 12px 10px}.mac-project-window .projects-subheading{margin:12px 13px 10px}.mac-project-window .featured-bento-grid{padding:0 12px 12px}.mac-project-window .featured-bento-grid>.project-card,.mac-project-window .featured-bento-grid>.project-card:first-child{min-height:230px}.mac-project-window .projects-more{margin:0 12px 12px;padding:13px 11px 10px}.mac-project-window .projects-more .project-card{min-height:215px}.mac-project-window .empty-state{margin:10px 12px 12px}}
