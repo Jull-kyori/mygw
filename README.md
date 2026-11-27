@@ -13,7 +13,7 @@ Buka [http://localhost:3000](http://localhost:3000). Periksa profil dan tautan s
 
 ## Atur profil
 
-Edit `src/config/site.ts` untuk mengganti username GitHub, email, LinkedIn, URL situs, nama, dan deskripsi. Nilai profil hanya disimpan di satu konfigurasi agar mudah dirawat. Username, email, dan LinkedIn saat ini masih berupa placeholder.
+Edit `src/config/site.ts` untuk mengganti username GitHub, email, LinkedIn, URL situs, nama, dan deskripsi. Nilai profil hanya disimpan di satu konfigurasi agar mudah dirawat. Username GitHub sudah diatur ke `Jull-kyori`; email dan LinkedIn masih perlu Anda isi.
 
 ## Pilih proyek unggulan
 
