@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { site } from '@/config/site';
@@ -11,5 +12,5 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="id"><body className={`${inter.variable} ${space.variable}`}>{children}</body></html>;
+  return <html lang="id"><body className={`${inter.variable} ${space.variable}`}>{children}<Analytics /></body></html>;
 }
