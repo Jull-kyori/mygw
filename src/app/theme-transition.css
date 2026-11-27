@@ -1,0 +1,161 @@
+/* ============================================================
+   SMOOTH THEME TRANSITION
+   Efek ripple dari titik klik + transisi semua properti warna
+   ============================================================ */
+
+/* ── 1. Global color/surface transition — semua elemen berubah warna perlahan ── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color     0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    color            0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow       0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    fill             0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    stroke           0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Kecualikan properti transform & opacity dari transisi global
+   agar animasi Framer Motion tetap berjalan mulus tanpa terganggu */
+*,
+*::before,
+*::after {
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    box-shadow,
+    fill,
+    stroke,
+    backdrop-filter,
+    -webkit-backdrop-filter,
+    text-shadow;
+}
+
+/* ── 2. Theme ripple — lingkaran yang mengembang dari titik klik ── */
+.theme-ripple {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 1px;
+  height: 1px;
+  left: var(--rx, 50%);
+  top:  var(--ry, 50%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: theme-ripple-expand 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Ripple menuju gelap → lingkaran gelap */
+.theme-ripple.ripple-to-dark {
+  background: radial-gradient(circle, rgba(13,13,25,0.96) 0%, rgba(13,13,25,0.90) 60%, transparent 100%);
+}
+
+/* Ripple menuju terang → lingkaran terang */
+.theme-ripple.ripple-to-light {
+  background: radial-gradient(circle, rgba(240,239,247,0.96) 0%, rgba(240,239,247,0.90) 60%, transparent 100%);
+}
+
+@keyframes theme-ripple-expand {
+  0%   { transform: translate(-50%, -50%) scale(0);    opacity: 1; }
+  60%  { transform: translate(-50%, -50%) scale(2800); opacity: 0.85; }
+  100% { transform: translate(-50%, -50%) scale(3200); opacity: 0; }
+}
+
+/* ── 3. Shell transition — background, warna, shadow halus ── */
+.portfolio-shell {
+  transition:
+    background-color 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+    color            0.5s  cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── 4. Header & nav pill transition ── */
+.site-header {
+  transition:
+    background-color 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color     0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow       0.55s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.nav-pill {
+  transition:
+    background-color 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color     0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow       0.55s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── 5. Glass cards transition ── */
+.glass,
+.project-card,
+.about-main, .about-campus, .about-focus,
+.stat-card, .skill-group, .timeline-card,
+.contact-panel, .contact-links,
+.modal, .modal-compact, .modal-frameless,
+.tech-node, .filter-chip, .search-box,
+.project-list-row, .achievement-pill,
+.floating-top-btn, .status-pill,
+.hero-orb, .float-note {
+  transition:
+    background-color 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color     0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow       0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    color            0.45s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── 6. Scroll progress bar color shift ── */
+.scroll-progress {
+  transition: none !important; /* scaleX sudah dihandle Framer Motion */
+}
+
+/* ── 7. Theme toggle button — ikon berputar saat ganti tema ── */
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle svg {
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity   0.3s ease !important;
+}
+
+.theme-toggle:active svg {
+  transform: rotate(30deg) scale(0.85);
+}
+
+/* ── 8. Background gradient shift smooth ── */
+.portfolio-shell,
+.portfolio-shell[data-theme=terang] {
+  transition:
+    background 0.70s cubic-bezier(0.4, 0, 0.2, 1),
+    color      0.50s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── 9. CSS variable-driven colors ── */
+/* Semua elemen yang menggunakan var() otomatis ikut transisi
+   karena property-nya sudah tercakup di global transition di atas */
+
+/* ── 10. Gradient text — tidak bisa transition warna, tapi opacity bisa ── */
+.gradient-text {
+  transition: opacity 0.4s ease !important;
+}
+
+/* ── 11. Ambient blobs — warna berubah perlahan ── */
+.ambient span {
+  transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── 12. Reduced motion — matikan ripple dan semua efek ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration:  0.01ms !important;
+  }
+
+  .theme-ripple {
+    display: none !important;
+  }
+}
