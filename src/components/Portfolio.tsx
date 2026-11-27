@@ -10,6 +10,97 @@ import type { Project } from '@/types/github';
 
 type Props = { projects: Project[]; profile: { public_repos: number; followers: number } | null; languages: string[]; isFallback: boolean };
 const languageColors: Record<string, string> = { TypeScript: '#47a9eb', JavaScript: '#f2cc60', Python: '#8caaee', HTML: '#e78284', CSS: '#ca9ee6', 'C++': '#ef9f76', PHP: '#babbf1' };
+
+/* ── Star Field Background ── */
+function StarField({ reduced }: { reduced: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    if (reduced || typeof window === 'undefined') return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    let raf = 0;
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+    const count = Math.min(Math.floor(window.innerWidth * 0.045), 90);
+    type Star = { x: number; y: number; r: number; o: number; speed: number; twinkle: number; phase: number };
+    const stars: Star[] = Array.from({ length: count }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight * 0.75,
+      r: Math.random() * 1.1 + 0.2,
+      o: Math.random() * 0.55 + 0.12,
+      speed: Math.random() * 0.08 + 0.01,
+      twinkle: Math.random() * 0.4 + 0.3,
+      phase: Math.random() * Math.PI * 2,
+    }));
+    let t = 0;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.012;
+      stars.forEach((s) => {
+        const opacity = s.o + Math.sin(t * s.twinkle + s.phase) * 0.18;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(210,200,255,${Math.max(0, Math.min(1, opacity))})`;
+        ctx.fill();
+        s.y -= s.speed;
+        if (s.y < -4) { s.y = window.innerHeight * 0.75; s.x = Math.random() * window.innerWidth; }
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
+  }, [reduced]);
+  if (reduced) return null;
+  return <canvas ref={canvasRef} className="star-field" aria-hidden="true" />;
+}
+
+/* ── Count-Up number on viewport enter ── */
+function CountUp({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+  const reduceMotion = useReducedMotion();
+  useEffect(() => {
+    if (reduceMotion) { setCount(target); return; }
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        const duration = 1200;
+        const startTime = performance.now();
+        const tick = (now: number) => {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setCount(Math.round(eased * target));
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target, reduceMotion]);
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
+/* ── Tooltip for tech nodes ── */
+function TechTooltip({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <span className="tech-tooltip-wrap">
+      {children}
+      <span className="tech-tooltip" role="tooltip">{label}</span>
+    </span>
+  );
+}
+
+/* ── Shimmer "TERBUKA" badge ── */
+function ShimmerBadge({ children }: { children: React.ReactNode }) {
+  return <span className="shimmer-badge">{children}<span className="shimmer-sweep" aria-hidden="true" /></span>;
+}
 const experiences = [
   { date: 'Pengalaman', title: 'Magang — Bakesbangpol Ponorogo', text: 'Membantu pembaruan website instansi, merapikan tampilan publik, dan membangun dashboard admin untuk pengelolaan berita.', tags: ['Web Instansi', 'Dashboard Admin', 'CMS'], icon: Braces },
   { date: 'Riset & Eksplorasi', title: 'Pengembangan Proyek AI & IoT', text: 'Mengeksplorasi deteksi video deepfake berbasis deep learning serta merangkai prototipe perangkat cerdas menggunakan ESP32.', tags: ['Python', 'TensorFlow', 'ESP32'], icon: Cpu },
@@ -359,9 +450,10 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
     <motion.div className="scroll-progress" style={{ scaleX: progress }} />
     <div className="cursor-glow" aria-hidden="true" />
     <CustomCursor reduced={Boolean(reduceMotion)} />
+    <StarField reduced={Boolean(reduceMotion)} />
     <header className="site-header"><a href="#beranda" className="brand"><span className="brand-mark">F<span>.</span></span><span>Faza<span className="brand-last"> Mughni</span></span></a><nav className={`nav-pill ${menuOpen ? 'nav-open' : ''}`} aria-label="Navigasi utama">{links.map((label) => <a href={`#${label === 'Beranda' ? 'beranda' : label.toLowerCase()}`} key={label} onClick={() => setMenuOpen(false)} className={active === label ? 'active' : ''}>{active === label && <motion.i layoutId="nav-active" className="nav-active" />}<span className="nav-label">{label}</span></a>)}</nav><div className="header-actions"><button className="icon-button search-toggle" onClick={() => setPaletteOpen(true)} aria-label="Buka pencarian cepat"><Search size={16} /></button><button className="icon-button theme-toggle" onClick={toggleTheme} aria-label={`Aktifkan mode ${theme === 'gelap' ? 'terang' : 'gelap'}`}>{theme === 'gelap' ? <Sun size={17} /> : <Moon size={17} />}</button><button className="icon-button menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Buka navigasi">{menuOpen ? <X size={20} /> : <Menu size={20} />}</button></div></header>
 
-    <section className="hero section-wrap" id="beranda"><motion.div className="hero-copy" initial={reduceMotion ? false : 'hidden'} animate="show" variants={{ show: { transition: { staggerChildren: reduceMotion ? 0 : 0.12 } } }}><motion.div variants={reveal} className="status-pill"><span className="status-dot" /> TERBUKA UNTUK KOLABORASI</motion.div><motion.p variants={reveal} className="hero-kicker hover-word">Halo, saya</motion.p><motion.h1 variants={reveal} className="hover-word">Faza Ilmal<br /><span className="gradient-text">Mughni<span className="hero-period">.</span></span></motion.h1><motion.div variants={reveal} className="role-line"><span className="role-prefix">Saya seorang</span><AnimatePresence mode="wait"><motion.span key={role} className="role-value" initial={reduceMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }} transition={{ duration: reduceMotion ? 0 : 0.32 }}>{roles[role]}</motion.span></AnimatePresence></motion.div><motion.p variants={reveal} className="hero-description">Merancang pengalaman web yang bermakna, mengeksplorasi AI, dan menghubungkan ide digital dengan dunia nyata.</motion.p><motion.div variants={reveal} className="hero-actions"><MagneticLink href="#proyek" className="button button-primary" reduced={Boolean(reduceMotion)}>Jelajahi proyek <ArrowDownRight size={17} /></MagneticLink><MagneticLink href="#kontak" className="button button-glass" reduced={Boolean(reduceMotion)}>Mari terhubung <ArrowUpRight size={16} /></MagneticLink>{site.cvUrl ? <a href={site.cvUrl} target="_blank" rel="noreferrer" className="button button-glass"><FileText size={15} /> Unduh CV</a> : <button type="button" className="button button-glass" onClick={() => setCvOpen(true)}><FileText size={15} /> Ringkasan CV</button>}</motion.div><motion.div variants={reveal} className="social-links"><a className="hover-underline" href={`https://github.com/${site.githubUsername}`} target="_blank" rel="noreferrer"><Github size={16} /> GitHub <ArrowUpRight size={12} /></a>{site.instagram && <a className="hover-underline" href={site.instagram} target="_blank" rel="noreferrer"><Instagram size={16} /> Instagram <ArrowUpRight size={12} /></a>}{site.tiktok && <a className="hover-underline" href={site.tiktok} target="_blank" rel="noreferrer"><TikTokIcon size={16} /> TikTok <ArrowUpRight size={12} /></a>}{site.email && <a className="hover-underline" href={`mailto:${site.email}`}><Mail size={16} /> Email <ArrowUpRight size={12} /></a>}{site.linkedin && <a className="hover-underline" href={site.linkedin} target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn <ArrowUpRight size={12} /></a>}</motion.div><motion.div variants={reveal} className="hero-highlights"><div><span>FOKUS</span><b>Full Stack · AI · IoT</b></div><div><span>BASIS</span><b>Ponorogo, Indonesia</b></div><div><span>PROYEK</span><b>{projects.length}+ Repository</b></div></motion.div></motion.div>
+    <section className="hero section-wrap" id="beranda"><motion.div className="hero-copy" initial={reduceMotion ? false : 'hidden'} animate="show" variants={{ show: { transition: { staggerChildren: reduceMotion ? 0 : 0.12 } } }}><motion.div variants={reveal} className="status-pill"><span className="status-dot" /><ShimmerBadge>TERBUKA UNTUK KOLABORASI</ShimmerBadge></motion.div><motion.p variants={reveal} className="hero-kicker hover-word">Halo, saya</motion.p><motion.h1 variants={reveal} className="hover-word">Faza Ilmal<br /><span className="gradient-text">Mughni<span className="hero-period">.</span></span></motion.h1><motion.div variants={reveal} className="role-line"><span className="role-prefix">Saya seorang</span><AnimatePresence mode="wait"><motion.span key={role} className="role-value" initial={reduceMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }} transition={{ duration: reduceMotion ? 0 : 0.32 }}>{roles[role]}</motion.span></AnimatePresence></motion.div><motion.p variants={reveal} className="hero-description">Merancang pengalaman web yang bermakna, mengeksplorasi AI, dan menghubungkan ide digital dengan dunia nyata.</motion.p><motion.div variants={reveal} className="hero-actions"><MagneticLink href="#proyek" className="button button-primary" reduced={Boolean(reduceMotion)}>Jelajahi proyek <ArrowDownRight size={17} /></MagneticLink><MagneticLink href="#kontak" className="button button-glass" reduced={Boolean(reduceMotion)}>Mari terhubung <ArrowUpRight size={16} /></MagneticLink>{site.cvUrl ? <a href={site.cvUrl} target="_blank" rel="noreferrer" className="button button-glass"><FileText size={15} /> Unduh CV</a> : <button type="button" className="button button-glass" onClick={() => setCvOpen(true)}><FileText size={15} /> Ringkasan CV</button>}</motion.div><motion.div variants={reveal} className="social-links"><a className="hover-underline" href={`https://github.com/${site.githubUsername}`} target="_blank" rel="noreferrer"><Github size={16} /> GitHub <ArrowUpRight size={12} /></a>{site.instagram && <a className="hover-underline" href={site.instagram} target="_blank" rel="noreferrer"><Instagram size={16} /> Instagram <ArrowUpRight size={12} /></a>}{site.tiktok && <a className="hover-underline" href={site.tiktok} target="_blank" rel="noreferrer"><TikTokIcon size={16} /> TikTok <ArrowUpRight size={12} /></a>}{site.email && <a className="hover-underline" href={`mailto:${site.email}`}><Mail size={16} /> Email <ArrowUpRight size={12} /></a>}{site.linkedin && <a className="hover-underline" href={site.linkedin} target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn <ArrowUpRight size={12} /></a>}</motion.div><motion.div variants={reveal} className="hero-highlights"><div><span>FOKUS</span><b>Full Stack · AI · IoT</b></div><div><span>BASIS</span><b>Ponorogo, Indonesia</b></div><div><span>PROYEK</span><b>{projects.length}+ Repository</b></div></motion.div></motion.div>
 		<motion.div className="hero-art" initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: reduceMotion ? 0 : 0.3, duration: reduceMotion ? 0 : 0.8 }}><div className="orbit orbit-one" /><div className="orbit orbit-two" /><Glass className="hero-orb"><div className="orb-top"><span className="orb-spark"><Sparkles size={15} /></span><span>RUANG EKSPLORASI</span></div><div className="orb-glyph profile-photo-wrap"><Image src="/profile.png" alt="Foto profil Faza Ilmal Mughni" width={768} height={1024} priority className="profile-photo" /></div><div className="orb-bottom"><div><span>BERBASIS</span><b>Rasa ingin tahu</b></div><ArrowDownRight size={18} /></div></Glass><CodeCard reduced={Boolean(reduceMotion)} /><Glass className="float-note note-ai"><span className="ai-dot" /><span>AI + IoT</span></Glass><div className="art-caption">PONOROGO, ID <span>·</span> {wibTime ? `${wibTime} WIB` : new Date().getFullYear()}</div></motion.div>
       <a href="#tentang" className="scroll-cue"><span>GULIR UNTUK MENJELAJAH</span><ArrowDown size={14} /></a></section>
 
@@ -416,7 +508,9 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
                 const selectedTech = activeTech === item;
                 return (
                   <button key={item} className={`tech-node tone-${group.tone} ${selectedTech ? 'is-selected' : ''}`} aria-pressed={selectedTech} onClick={() => setActiveTech(selectedTech ? null : item)} style={{ ['--phase' as string]: `${itemIndex * -0.25}s` }}>
+                    <TechTooltip label={`${group.title} — klik untuk filter proyek`}>
                     <span className="tech-node-icon"><TechIcon size={15} /></span>
+                    </TechTooltip>
                     <span className="tech-node-body"><b>{item}</b><small>{group.title}</small></span>
                     <i className="tech-node-pulse" aria-hidden="true" />
                   </button>
@@ -434,7 +528,7 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
 
     <div className="section-divider" aria-hidden="true"><i /><span>✦</span><i /></div>
 
-    <section className="section-wrap journey-section" id="perjalanan"><div className="journey-layout"><div className="journey-aside"><SectionHeading direction="left" eyebrow="LANGKAH YANG MEMBENTUK" title={<>Perjalanan yang<br /><span className="gradient-text">masih berlangsung.</span></>} copy="Setiap tahap belajar, magang, dan eksperimen membentuk cara saya merancang solusi yang rapi dan berdampak." /><motion.div variants={revealScale} initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.25 }}><Glass className="journey-summary glow" {...usePointerGlow()}><span className="card-eyebrow">SAAT INI</span><h3>Menjembatani kode, data, dan perangkat nyata.</h3><p>Fokus menyelesaikan studi Informatika sembari membangun portofolio proyek web, AI, dan IoT yang siap digunakan.</p><div className="journey-metrics"><div><strong>{experiences.length}</strong><span>Fase utama</span></div><div><strong>{projects.length}+</strong><span>Karya publik</span></div></div></Glass></motion.div></div><div className="timeline" ref={timelineRef}><motion.span className="timeline-progress" style={{ scaleY: journeyScale }} />{experiences.map((item, index) => { const Icon = item.icon; return <motion.div key={item.title} variants={reveal} initial={reduceMotion ? false : { opacity: 0, x: index % 2 ? 34 : -34 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} transition={{ duration: reduceMotion ? 0 : 0.55, delay: reduceMotion ? 0 : index * 0.08 }} viewport={{ once: true, amount: 0.45 }} className="timeline-item"><div className="timeline-rail"><motion.span className="timeline-dot" whileInView={reduceMotion ? undefined : { scale: 1.25, boxShadow: '0 0 18px rgba(193,166,255,.85)' }} viewport={{ once: true }} /><span className="timeline-line" /></div><Glass className="timeline-card glow" {...usePointerGlow()}><span className="card-eyebrow">{item.date}</span><span className="timeline-icon"><Icon size={18} /></span><h3 className="hover-word">{item.title}</h3><p>{item.text}</p>{item.tags && <div className="timeline-tags">{item.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}<span className="timeline-number">0{index + 1}</span></Glass></motion.div>; })}</div></div>
+    <section className="section-wrap journey-section" id="perjalanan"><div className="journey-layout"><div className="journey-aside"><SectionHeading direction="left" eyebrow="LANGKAH YANG MEMBENTUK" title={<>Perjalanan yang<br /><span className="gradient-text">masih berlangsung.</span></>} copy="Setiap tahap belajar, magang, dan eksperimen membentuk cara saya merancang solusi yang rapi dan berdampak." /><motion.div variants={revealScale} initial={reduceMotion ? false : 'hidden'} whileInView={reduceMotion ? undefined : 'show'} viewport={{ once: true, amount: 0.25 }}><Glass className="journey-summary glow" {...usePointerGlow()}><span className="card-eyebrow">SAAT INI</span><h3>Menjembatani kode, data, dan perangkat nyata.</h3><p>Fokus menyelesaikan studi Informatika sembari membangun portofolio proyek web, AI, dan IoT yang siap digunakan.</p><div className="journey-metrics"><div><strong><CountUp target={experiences.length} /></strong><span>Fase utama</span></div><div><strong><CountUp target={projects.length} suffix="+" /></strong><span>Karya publik</span></div></div></Glass></motion.div></div><div className="timeline" ref={timelineRef}><motion.span className="timeline-progress" style={{ scaleY: journeyScale }} />{experiences.map((item, index) => { const Icon = item.icon; return <motion.div key={item.title} variants={reveal} initial={reduceMotion ? false : { opacity: 0, x: index % 2 ? 34 : -34 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} transition={{ duration: reduceMotion ? 0 : 0.55, delay: reduceMotion ? 0 : index * 0.08 }} viewport={{ once: true, amount: 0.45 }} className="timeline-item"><div className="timeline-rail"><motion.span className="timeline-dot" whileInView={reduceMotion ? undefined : { scale: 1.25, boxShadow: '0 0 18px rgba(193,166,255,.85)' }} viewport={{ once: true }} /><span className="timeline-line" /></div><Glass className="timeline-card glow" {...usePointerGlow()}><span className="card-eyebrow">{item.date}</span><span className="timeline-icon"><Icon size={18} /></span><h3 className="hover-word">{item.title}</h3><p>{item.text}</p>{item.tags && <div className="timeline-tags">{item.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}<span className="timeline-number">0{index + 1}</span></Glass></motion.div>; })}</div></div>
       <div className="achievements-strip" aria-label="Pencapaian dan fokus utama">
         {achievements.map((item) => (
           <div key={item.title} className="achievement-pill glass">
@@ -460,6 +554,12 @@ export default function Portfolio({ projects, profile, languages, isFallback }: 
         </div>
       </form>
       {copied && <span className="copy-toast" role="status">Email tersalin</span>}</div><div className="contact-links"><span className="card-eyebrow">TEMUKAN SAYA DI</span><div className="contact-links-grid"><a className="contact-card link-github" href={`https://github.com/${site.githubUsername}`} target="_blank" rel="noreferrer"><span><Github size={18} /></span><div><b>GitHub</b><small>@{site.githubUsername}</small></div><ArrowUpRight size={16} /></a>{site.instagram && <a className="contact-card link-ig" href={site.instagram} target="_blank" rel="noreferrer"><span><Instagram size={18} /></span><div><b>Instagram</b><small>{site.instagramHandle || 'Lihat profil'}</small></div><ArrowUpRight size={16} /></a>}{site.tiktok && <a className="contact-card link-tiktok" href={site.tiktok} target="_blank" rel="noreferrer"><span><TikTokIcon size={18} /></span><div><b>TikTok</b><small>{site.tiktokHandle || 'Konten & eksplorasi'}</small></div><ArrowUpRight size={16} /></a>}{site.email && <a className="contact-card link-email" href={`mailto:${site.email}`}><span><Mail size={18} /></span><div><b>Email</b><small>{site.email}</small></div><ArrowUpRight size={16} /></a>}{site.linkedin && <a className="contact-card link-linkedin" href={site.linkedin} target="_blank" rel="noreferrer"><span><Linkedin size={18} /></span><div><b>LinkedIn</b><small>Terhubung secara profesional</small></div><ArrowUpRight size={16} /></a>}</div></div></Glass></motion.div></section>
+    <div className="footer-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 54" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,32 C240,54 480,0 720,32 C960,54 1200,0 1440,32 L1440,54 L0,54 Z" fill="rgba(255,255,255,0.03)" />
+        <path d="M0,42 C360,20 720,54 1080,24 C1260,12 1380,38 1440,42 L1440,54 L0,54 Z" fill="rgba(185,162,255,0.04)" />
+      </svg>
+    </div>
     <footer className="site-footer"><a href="#beranda" className="brand"><span className="brand-mark">F<span>.</span></span><span>Faza<span className="brand-last"> Mughni</span></span></a><span>Dibuat dengan rasa ingin tahu <span className="footer-heart">✳</span> dari Ponorogo</span><a className="back-top" href="#beranda">Kembali ke atas <ArrowUpRight size={14} /></a><small>© {new Date().getFullYear()} FAZA ILMAL MUGHNI</small></footer>
     <AnimatePresence>{showTop && <motion.a href="#beranda" className="floating-top-btn glass" initial={{ opacity: 0, y: 14, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.9 }} aria-label="Kembali ke atas"><ArrowDown size={15} style={{ transform: 'rotate(180deg)' }} /></motion.a>}</AnimatePresence>
     <AnimatePresence>{selected && <ProjectModal project={selected} close={() => setSelected(null)} />}</AnimatePresence>

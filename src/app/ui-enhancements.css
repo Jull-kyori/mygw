@@ -1,0 +1,343 @@
+/* ============================================================
+   UI ENHANCEMENTS — Star Field, CountUp, Tooltip, Shimmer, Wave
+   ============================================================ */
+
+/* ── Star Field Canvas ── */
+.star-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .55;
+  mix-blend-mode: screen;
+}
+
+.portfolio-shell[data-theme=terang] .star-field {
+  opacity: .12;
+  mix-blend-mode: multiply;
+}
+
+/* ── Shimmer Badge ── */
+.shimmer-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.shimmer-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,.45) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: shimmer-move 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer-move {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(140%); }
+  100% { transform: translateX(140%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-sweep { animation: none; }
+}
+
+/* ── Tech Tooltip ── */
+.tech-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tech-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(16,14,32,.95);
+  color: #e2dcff;
+  font-size: 9px;
+  letter-spacing: .4px;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 9px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  border: 1px solid rgba(185,162,255,.22);
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: opacity .18s, transform .18s;
+  z-index: 20;
+}
+
+.tech-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(185,162,255,.22);
+}
+
+.tech-tooltip-wrap:hover .tech-tooltip,
+.tech-tooltip-wrap:focus-within .tech-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.portfolio-shell[data-theme=terang] .tech-tooltip {
+  background: rgba(252,251,255,.97);
+  color: #3a2f60;
+  border-color: rgba(90,70,160,.18);
+  box-shadow: 0 8px 24px rgba(60,50,100,.14);
+}
+
+/* ── CountUp Numbers ── */
+.journey-metrics strong {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 2ch;
+  text-align: center;
+}
+
+/* ── Wave Footer Divider ── */
+.footer-wave {
+  position: relative;
+  z-index: 1;
+  line-height: 0;
+  margin-bottom: -2px;
+}
+
+.footer-wave svg {
+  width: 100%;
+  height: 54px;
+  display: block;
+}
+
+/* ── Gradient Mesh Background ── */
+.portfolio-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 10%, rgba(120,80,220,.07), transparent),
+    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(60,160,200,.06), transparent),
+    radial-gradient(ellipse 55% 45% at 50% 80%, rgba(180,80,160,.05), transparent);
+  animation: mesh-shift 18s ease-in-out infinite alternate;
+}
+
+.portfolio-shell[data-theme=terang]::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 10%, rgba(140,100,230,.05), transparent),
+    radial-gradient(ellipse 50% 60% at 80% 20%, rgba(60,140,200,.04), transparent),
+    radial-gradient(ellipse 55% 45% at 50% 80%, rgba(200,80,170,.04), transparent);
+}
+
+@keyframes mesh-shift {
+  0%   { background-position: 0% 0%, 100% 20%, 50% 80%; }
+  50%  { background-position: 10% 15%, 85% 10%, 60% 90%; }
+  100% { background-position: 5% 25%, 95% 5%, 40% 70%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-shell::before { animation: none; }
+}
+
+/* ── Hover Word Highlight Effect ── */
+.hover-word {
+  position: relative;
+  display: inline;
+  cursor: default;
+}
+
+/* ── Project count-up in hero highlights ── */
+.hero-highlights {
+  display: flex;
+  gap: 22px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.hero-highlights > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-highlights > div span {
+  font-size: 7.5px;
+  letter-spacing: 1.2px;
+  color: var(--local-soft);
+}
+
+.hero-highlights > div b {
+  font-size: 11px;
+  font-weight: 560;
+  color: var(--local-fg);
+}
+
+/* ── Glow on active nav link ── */
+.nav-pill a.active {
+  text-shadow: 0 0 18px rgba(190,170,255,.55);
+}
+
+/* ── Scroll Progress refined ── */
+.scroll-progress {
+  box-shadow: 0 0 10px rgba(185,162,255,.5);
+}
+
+/* ── Floating top button pulse ring ── */
+.floating-top-btn {
+  position: relative;
+}
+
+.floating-top-btn::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 17px;
+  border: 1px solid rgba(185,162,255,.3);
+  animation: top-btn-pulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.floating-top-btn:hover::before {
+  opacity: 1;
+}
+
+@keyframes top-btn-pulse {
+  0%, 100% { transform: scale(1); opacity: .3; }
+  50%       { transform: scale(1.12); opacity: .7; }
+}
+
+/* ── Section Divider Enhanced ── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(1050px, calc(100% - 64px));
+  margin: 56px auto;
+  opacity: .4;
+}
+
+.section-divider i {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(185,162,255,.5), transparent);
+}
+
+.section-divider span {
+  font-size: 11px;
+  color: rgba(185,162,255,.7);
+  animation: divider-spin 12s linear infinite;
+  display: inline-block;
+}
+
+@keyframes divider-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Contact cards hover glow by platform ── */
+.contact-card.link-github:hover { border-color: rgba(255,255,255,.24) !important; box-shadow: 0 10px 32px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.12) !important; }
+.contact-card.link-ig:hover     { border-color: rgba(240,120,180,.35) !important; box-shadow: 0 10px 32px rgba(220,80,140,.12), 0 0 20px rgba(240,120,180,.10) !important; }
+.contact-card.link-tiktok:hover { border-color: rgba(105,220,215,.35) !important; box-shadow: 0 10px 32px rgba(60,200,190,.10), 0 0 20px rgba(100,220,215,.10) !important; }
+.contact-card.link-email:hover  { border-color: rgba(185,162,255,.38) !important; box-shadow: 0 10px 32px rgba(130,100,200,.12), 0 0 20px rgba(185,162,255,.10) !important; }
+.contact-card.link-linkedin:hover { border-color: rgba(80,150,220,.35) !important; box-shadow: 0 10px 32px rgba(60,120,200,.10), 0 0 20px rgba(80,150,220,.10) !important; }
+
+/* ── Project card "featured" shimmer ── */
+.featured-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    125deg,
+    rgba(185,162,255,.08) 0%,
+    transparent 45%,
+    rgba(100,220,215,.06) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Skill items enhanced hover ── */
+.skill-items span:hover {
+  background: rgba(185,162,255,.14) !important;
+  border-color: rgba(185,162,255,.38) !important;
+  color: var(--local-fg) !important;
+  box-shadow: 0 4px 14px rgba(130,100,200,.12);
+}
+
+/* ── Timeline dot animated entry ── */
+.timeline-dot {
+  animation: dot-enter .5s ease-out both;
+}
+
+@keyframes dot-enter {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ── Mac window bar enhanced ── */
+.mac-window-controls i:nth-child(1) { background: #ef8f9f; }
+.mac-window-controls i:nth-child(2) { background: #e7bf72; }
+.mac-window-controls i:nth-child(3) { background: #77d7ab; }
+.mac-window-controls i { transition: filter .18s; }
+.mac-window-controls:hover i { filter: brightness(1.2) saturate(1.3); }
+
+/* ── Back-to-top button: solid glass arrow ── */
+.floating-top-btn svg {
+  transition: transform .22s cubic-bezier(.22,1,.36,1);
+}
+.floating-top-btn:hover svg {
+  transform: rotate(180deg) translateY(2px) !important;
+}
+
+/* ── Filter chip active count badge ── */
+.filter-chip.selected::after {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #b9a2ff;
+  margin-left: 5px;
+  vertical-align: middle;
+  animation: signal-pulse 2s ease-in-out infinite;
+}
+
+/* ── Project index numbering highlight ── */
+.project-index {
+  transition: color .2s;
+}
+.project-card:hover .project-index {
+  color: rgba(185,162,255,.7);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .tech-tooltip { display: none; }
+  .footer-wave svg { height: 32px; }
+  .hero-highlights { gap: 14px; }
+  .hero-highlights > div b { font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-sweep,
+  .footer-wave,
+  .section-divider span,
+  .floating-top-btn::before { animation: none !important; }
+  .star-field { display: none; }
+}

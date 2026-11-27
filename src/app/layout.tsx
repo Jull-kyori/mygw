@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import './liquid-glass.css';
+import './ui-enhancements.css';
 import { site } from '@/config/site';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
