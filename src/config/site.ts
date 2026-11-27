@@ -3,8 +3,12 @@ export const site = {
   role: 'Mahasiswa Informatika · Pengembang Full Stack',
   description: 'Mahasiswa Informatika Universitas Muhammadiyah Ponorogo yang senang membangun produk digital, mengeksplorasi AI, dan merangkai solusi IoT.',
   githubUsername: 'Jull-kyori',
-  // Isi jika ingin menampilkan tautan kontak pada halaman.
-  email: '',
+  // Sesuaikan tautan kontak dan media sosial di bawah ini.
+  email: 'fazailmalmughni@gmail.com',
+  instagram: 'https://instagram.com/fazailmal',
+  instagramHandle: '@fazailmal',
+  tiktok: 'https://tiktok.com/@fazailmal',
+  tiktokHandle: '@fazailmal',
   linkedin: '',
   url: 'https://faza-portfolio.vercel.app',
 };

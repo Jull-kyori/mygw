@@ -259,3 +259,105 @@
 .portfolio-shell[data-theme=terang] .timeline-item:nth-child(even) .timeline-card{background:linear-gradient(145deg,rgba(210,131,183,.12),rgba(255,255,255,.72) 72%)}
 .portfolio-shell[data-theme=terang] .contact-panel{background:linear-gradient(125deg,rgba(10,132,255,.1),rgba(255,255,255,.75) 48%,rgba(191,90,242,.09))!important}
 @media(max-width:640px){.hero-orb{border-radius:26px!important}.contact-panel{border-radius:22px}}
+
+/* Kursor interaktif, efek hover teks, dan tata letak yang lebih berisi. */
+.custom-cursor{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:0;transition:opacity .25s ease}
+.custom-cursor.is-visible{opacity:1}
+.custom-cursor-ring,.custom-cursor-dot{position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;translate:-50% -50%}
+.custom-cursor-ring{width:34px;height:34px;border:1.5px solid rgba(164,185,255,.55);background:rgba(130,165,255,.04);box-shadow:0 0 22px rgba(10,132,255,.14);transition:width .24s cubic-bezier(.22,1,.36,1),height .24s cubic-bezier(.22,1,.36,1),border-color .24s,background-color .24s,transform .18s}
+.custom-cursor-dot{width:6px;height:6px;background:#8bc4ff;box-shadow:0 0 10px rgba(120,184,255,.75);transition:width .2s,height .2s,background-color .2s,opacity .2s}
+.custom-cursor.is-interactive .custom-cursor-ring{width:50px;height:50px;border-color:rgba(120,184,255,.82);background:rgba(10,132,255,.11)}
+.custom-cursor.is-interactive .custom-cursor-dot{width:8px;height:8px;background:#ffffff}
+.custom-cursor.is-text .custom-cursor-ring{width:42px;height:42px;border-color:rgba(213,167,255,.75);background:rgba(189,156,255,.08)}
+.custom-cursor.is-pressed .custom-cursor-ring{transform:scale(.84)}
+.portfolio-shell[data-theme=terang] .custom-cursor-ring{border-color:rgba(10,132,255,.45);background:rgba(10,132,255,.05)}
+.portfolio-shell[data-theme=terang] .custom-cursor-dot{background:#0a84ff}
+.portfolio-shell[data-theme=terang] .custom-cursor.is-interactive .custom-cursor-dot{background:#1d1d1f}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.custom-cursor{display:none!important}}
+
+/* Hover teks & mikro-interaksi */
+.hover-word{transition:color .28s ease,text-shadow .28s ease,letter-spacing .28s ease}
+.hover-word:hover{text-shadow:0 0 26px rgba(138,184,255,.26)}
+.gradient-text{background-size:200% auto;transition:background-position .65s cubic-bezier(.22,1,.36,1),filter .3s ease}
+.hover-word:hover .gradient-text,.section-heading h2:hover .gradient-text{background-position:100% 50%;filter:brightness(1.08)}
+.hover-underline{position:relative}
+.hover-underline::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1.5px;border-radius:99px;background:linear-gradient(90deg,#78b8ff,#bd9cff,#f09bc7);transform:scaleX(0);transform-origin:left;transition:transform .28s cubic-bezier(.22,1,.36,1)}
+.hover-underline:hover::after{transform:scaleX(1)}
+.nav-pill a{transition:color .2s,transform .2s}
+.nav-pill a:hover{color:var(--local-fg);transform:translateY(-1px)}
+.social-links{flex-wrap:wrap;gap:14px 20px}
+.social-links a{transition:color .2s,transform .22s cubic-bezier(.22,1,.36,1)}
+.social-links a:hover{transform:translateY(-2px)}
+.focus-row{border-radius:12px;padding:12px 10px;margin:0 -10px;transition:background-color .22s ease,transform .22s ease}
+.focus-row:hover{background:rgba(255,255,255,.045);transform:translateX(3px)}
+.portfolio-shell[data-theme=terang] .focus-row:hover{background:rgba(10,132,255,.055)}
+.focus-row>svg{transition:transform .22s ease,color .22s ease}
+.focus-row:hover>svg{transform:translate(2px,-2px);color:var(--local-fg)}
+.project-card h3{transition:color .22s ease}
+.project-card:hover h3{color:#8ec5ff}
+.portfolio-shell[data-theme=terang] .project-card:hover h3{color:#0a68d8}
+
+/* Hero highlights */
+.hero-highlights{margin-top:26px;padding-top:18px;border-top:1px solid var(--local-border);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:460px}
+.hero-highlights div{display:flex;flex-direction:column;gap:4px}
+.hero-highlights span{font-size:8px;letter-spacing:1.25px;color:var(--local-soft);font-weight:600}
+.hero-highlights b{font-size:11px;font-weight:550;color:var(--local-fg)}
+
+/* About card yang lebih berisi */
+.about-grid{grid-template-rows:minmax(205px,auto) minmax(175px,auto) minmax(132px,auto)}
+.about-main{display:flex;flex-direction:column}
+.about-main p{max-width:430px;font-size:12px}
+.about-highlights{margin-top:20px;padding-top:16px;border-top:1px solid var(--local-border);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.about-highlights div{display:flex;flex-direction:column;gap:4px}
+.about-highlights span{font-size:7.5px;letter-spacing:1.2px;color:var(--local-soft);font-weight:600}
+.about-highlights b{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:550;color:var(--local-fg)}
+.about-signature{position:static;margin-top:auto;padding-top:18px}
+
+/* Journey 2 kolom agar lebih seimbang */
+.journey-layout{display:grid;grid-template-columns:.88fr 1.12fr;gap:34px;align-items:start}
+.journey-aside{position:sticky;top:92px}
+.journey-aside .section-heading{margin-bottom:22px}
+.journey-summary{padding:22px}
+.journey-summary .card-eyebrow{display:block;margin-bottom:10px}
+.journey-summary h3{margin:0 0 8px;font:500 18px/1.3 var(--font-display);letter-spacing:-.4px}
+.journey-summary p{margin:0;color:var(--local-muted);font-size:11px;line-height:1.75}
+.journey-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--local-border)}
+.journey-metrics div{display:flex;flex-direction:column;gap:3px}
+.journey-metrics strong{font:500 24px/1 var(--font-display);letter-spacing:-1px;color:#78b8ff}
+.journey-metrics span{font-size:9px;color:var(--local-muted)}
+.timeline{max-width:100%}
+.timeline-item:nth-child(even) .timeline-card,.timeline-item:nth-child(odd) .timeline-card{transform:none}
+.timeline-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.timeline-tags span{padding:4px 9px;border-radius:99px;border:1px solid var(--local-border);background:rgba(255,255,255,.04);font-size:8.5px;color:var(--local-muted)}
+
+/* Contact Temukan Saya Di (GitHub, IG, TikTok, Email) */
+.contact-panel{grid-template-columns:1fr 1.15fr;gap:32px}
+.contact-links{padding:20px}
+.contact-links>.card-eyebrow{padding:0 0 12px}
+.contact-links-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.contact-links .contact-card{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--local-border);border-radius:14px;background:rgba(255,255,255,.035);transition:transform .24s cubic-bezier(.22,1,.36,1),border-color .24s,background-color .24s}
+.contact-links .contact-card:hover{transform:translateY(-2px);border-color:rgba(120,184,255,.45);background:rgba(255,255,255,.075)}
+.portfolio-shell[data-theme=terang] .contact-links .contact-card{background:rgba(255,255,255,.6)}
+.portfolio-shell[data-theme=terang] .contact-links .contact-card:hover{background:#fff}
+.contact-links .contact-card>span{height:34px;width:34px;flex:0 0 auto;display:grid;place-items:center;border:1px solid var(--local-border);border-radius:10px;color:#78b8ff;background:rgba(10,132,255,.1)}
+.contact-links .contact-card.link-ig>span{color:#f09bc7;background:rgba(240,155,199,.12)}
+.contact-links .contact-card.link-tiktok>span{color:#66deee;background:rgba(102,222,238,.12)}
+.contact-links .contact-card.link-email>span{color:#c5b1ff;background:rgba(189,156,255,.12)}
+.contact-links .contact-card>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.contact-links .contact-card b{font-size:10.5px;font-weight:550}
+.contact-links .contact-card small{font-size:8.5px;color:var(--local-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.contact-links .contact-card>svg{color:var(--local-soft);flex:0 0 auto;transition:transform .22s,color .22s}
+.contact-links .contact-card:hover>svg{transform:translate(2px,-2px);color:var(--local-fg)}
+
+@media(max-width:900px){
+  .journey-layout{grid-template-columns:1fr;gap:24px}
+  .journey-aside{position:static}
+  .contact-panel{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .hero-highlights{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:22px;padding-top:14px}
+  .hero-highlights b{font-size:9.5px}
+  .about-grid{grid-template-rows:auto}
+  .about-highlights{grid-template-columns:1fr;gap:8px;margin-top:14px;padding-top:12px}
+  .contact-links-grid{grid-template-columns:1fr}
+}
